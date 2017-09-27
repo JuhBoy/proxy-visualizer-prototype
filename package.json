@@ -1,0 +1,29 @@
+{
+  "name": "traffic-analyzer",
+  "version": "1.0.0",
+  "description": "Visualize all the trafic",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start-old": "npm run build && electron ./dist/main.js",
+    "start": "gulp && electron ./dist/main.js"
+  },
+  "repository": "N/A",
+  "keywords": [
+    "Debugging",
+    "HTTP(S) traffic"
+  ],
+  "author": "Julien Boyer",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron": "^2.0.2",
+    "gulp": "^4.0.0",
+    "gulp-typescript": "^5.0.1",
+    "tslint": "^5.10.0",
+    "typescript": "^3.4.3"
+  },
+  "dependencies": {
+    "gulp-cli": "^2.1.0"
+  }
+}
