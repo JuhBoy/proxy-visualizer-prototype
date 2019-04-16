@@ -7,9 +7,14 @@ export class ExchangeGenerator {
 
     public flush(): HTMLTableRowElement {
         const parent = document.getElementById(this.parentId.toString());
-        if (parent == undefined) throw new Error("Parent not found: " + this.parentId);
+        
+        if (parent == undefined) 
+            throw new Error("Parent not found: " + this.parentId);
+
         const child = document.createElement("tr");
         child.classList.add("exchange-element");
+
+        this.addUUIDNodeAttribute(child);
 
         const protocol = this.buildGenericNode(this.model.protocol);
         const status = this.buildStatusDom();
@@ -51,6 +56,12 @@ export class ExchangeGenerator {
         const domElement = document.createElement("td");
         domElement.innerText = innerText.toString();
         return domElement;
+    }
+
+    private addUUIDNodeAttribute(child: HTMLTableRowElement) {
+        const dataAttribute = document.createAttribute("data-uuid");
+        dataAttribute.value = this.model.uuid.toString();
+        child.setAttributeNode(dataAttribute);
     }
 }
 

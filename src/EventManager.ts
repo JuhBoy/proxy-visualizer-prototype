@@ -1,41 +1,59 @@
 import { BrowserWindow, ipcMain } from 'electron';
+import { HashStr as Hash } from './Utils/Collections';
+import { IHttpExchange } from './Models/IHttpExchange';
 
 export class EventManager {
 
     protected window: BrowserWindow;
-    protected handles: any;
+    protected handles: Hash<Function>;
 
 
     constructor(window: BrowserWindow) {
         this.window = window;
     }
 
-    public startListening() {
+    public startListening(): EventManager {
         this.handles = {};
+        return this;
     }
 
-    public stopListening() {
+    public stopListening(): EventManager {
         this.handles = null;
+        return this;
     }
 }
 
 export class MainEventManager extends EventManager {
 
-    public startListening() {
+    public startListening(): MainEventManager {
         super.startListening();
-        ipcMain.on("http-exchange-click", this.exchangeClickEvent);
-        this.handles["http-exchange-click"] = this.exchangeClickEvent;
+
+        let mainHandle = (event: any, args: any) => { this.exchangeClickEvent(event, args); };
+        ipcMain.on("http-exchange-click", mainHandle);
+        this.handles["http-exchange-click"] = mainHandle;
+
+        return this;
     }
 
-    public stopListening() {
-        for (let key in this.handles) {
+    public stopListening(): MainEventManager {
+        for (const key in this.handles) {
             if (!this.handles.hasOwnProperty(key)) { continue; }
             ipcMain.removeListener(key, this.handles[key]);
         }
         super.stopListening();
+
+        return this;
     }
 
-    private exchangeClickEvent(ev: any) {
-        // TODO: PROCESS EXCHANGES HERE
+    public pushExchangeData(data: IHttpExchange): void {
+        this.window.webContents.send("http-exchange-push", data);
+    }
+
+    private exchangeClickEvent(event: any, args: any): void {
+        const { uuid } = args;
+
+        // TODO: get details data and return them back to a new event handlle by IPC
+
+        this.window.webContents.send("test-block", uuid); // DEBUG HERE KICK ME OUT
     }
 }

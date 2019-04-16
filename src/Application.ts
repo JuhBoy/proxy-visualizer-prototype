@@ -1,22 +1,27 @@
 import { BrowserWindow } from "electron";
 import { join } from "path";
+import { MainEventManager, EventManager } from "./EventManager";
+import { Hash } from "./Utils/Collections";
 
 export class Application {
     private myName: String;
     private mainWindow: BrowserWindow;
     private currentWindow: BrowserWindow;
 
+    private eventHandlers: Hash<EventManager>;
+
     constructor(name: String) {
         this.myName = name;
+        this.eventHandlers = {};
     }
 
     public createWindow(): BrowserWindow {
         return new BrowserWindow({
-            height: 600,
-            width: 800,
+            height: 900,
+            width: 1600,
             frame: true,
             show: false,
-            backgroundColor: "#FFF" //"#272c34"
+            backgroundColor: "#FFF"
           });
     }
 
@@ -32,24 +37,37 @@ export class Application {
         this.mainWindow.on("closed", () => {this.mainWindow = null;});
         this.mainWindow.on("ready-to-show", () => {this.mainWindow.show()});
 
-        // DUMMY DATA FOR DEBUGGING
+        this.eventHandlers[this.mainWindow.id] = new MainEventManager(this.mainWindow).startListening();
+
+        this.DEBUG_PUSH();
+    }
+
+    public stopApplication(): void {
+        this.currentWindow = null;
+        this.mainWindow = null;
+
+        for (const key in this.eventHandlers) {
+            if (this.eventHandlers.hasOwnProperty(key)) {
+                this.eventHandlers[key].stopListening();
+            }
+        }
+    }
+
+    public openDevTools() {
+        this.currentWindow.webContents.openDevTools();
+    }
+
+    private DEBUG_PUSH(): void {
         setInterval(() => {
-            this.mainWindow.webContents.send("http-exchange-push", {
+            const manager = <MainEventManager>this.eventHandlers[this.mainWindow.id];
+            manager.pushExchangeData({
+                uuid: "123553-AZER1235AEZRT-123EZR23FE2RFZREG",
                 protocol: "HTTP 1.1",
                 status: 200,
                 host: "www.2befficient.fr",
                 path: "/toto/1?no=yes",
                 time: 2598
             });
-        }, 1000);
-    }
-
-    public stopApplication(): void {
-        this.currentWindow = null;
-        this.mainWindow = null;
-    }
-
-    public openDevTools() {
-        this.currentWindow.webContents.openDevTools();
+        }, 3000);
     }
 }

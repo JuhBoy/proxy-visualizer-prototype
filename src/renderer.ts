@@ -15,11 +15,24 @@
     }
 
     const addExchangeListener = function(row: HTMLTableRowElement) {
-        row.addEventListener("click", function(el) {
-            console.log(el);
-            ipcRenderer.send("http-exchange-click", "clicked");
-        });
+        row.addEventListener("click", function(event: any) {
+            event.stopPropagation();
+
+            const domTarget = event.currentTarget;
+            const uuid = domTarget.getAttribute('data-uuid');
+            ipcRenderer.send("http-exchange-click", { uuid: uuid });
+
+        }, false);
     }
 
+    // DEBUG HERE KICK ME
+    const testBlock = function() {
+        ipcRenderer.on('test-block', (ev: any, arg: any) => {
+            console.log("pong recieved: ", ev, arg);
+        })
+    };
+    testBlock();
+
     ipcFromMainHandler();
+    
 }());
