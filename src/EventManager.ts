@@ -1,6 +1,8 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { HashStr as Hash } from './Utils/Collections';
 import { IHttpExchange } from './Models/IHttpExchange';
+import { HttpClient } from './Web/HttpClient';
+import { IExchangeContent } from './Models/IExchangeContent';
 
 export class EventManager {
 
@@ -52,8 +54,11 @@ export class MainEventManager extends EventManager {
     private exchangeClickEvent(event: any, args: any): void {
         const { uuid } = args;
 
-        // TODO: get details data and return them back to a new event handlle by IPC
-
-        this.window.webContents.send("test-block", uuid); // DEBUG HERE KICK ME OUT
+        const query = { hostname: 'localhost', port: 8887, path: `get-exchange-content?uuid=${uuid}` };
+        
+        HttpClient.Request<IExchangeContent>(query, (status: number, exchangeContent: IExchangeContent) => {
+            if (status != 200 || exchangeContent == undefined) { /* TODO: Call error frame */ return; }
+            this.window.webContents.send('exchange-content', exchangeContent);
+         }, true);
     }
 }

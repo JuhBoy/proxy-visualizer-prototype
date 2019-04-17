@@ -16,6 +16,10 @@
         cursor: pointer;
       }
 
+      .pointer {
+        cursor: pointer;
+      }
+
     .gradient-45deg-indigo-purple {
       background: #303f9f;
       background: -webkit-linear-gradient(45deg, #303f9f, #7b1fa2) !important;
@@ -29,97 +33,140 @@
     }
 
     .marg-left-2 {
-      margin-left: 2%;
+      margin-left: 1%;
+    }
+
+    .padding-10 {
+      padding: 6px !important
     }
 
     .bold {
       font-weight: bold;
     }
 
+    .collection .collection-item {
+      padding: 2px 20px;
+    }
+
+    td, th {
+      padding: 6px 0px;
+    }
+
+    html {
+      font-size: 13px;
+    }
+
+    .scroll {
+      width: 20px;
+      height: 200px;
+      overflow: auto;
+      float: left;
+      margin: 0 0px;
+    }
+
+    .scroll4::-webkit-scrollbar {
+      width: 10px;
+    }
+ 
+    .scroll4::-webkit-scrollbar-thumb {
+      background: #666;
+      border-radius: 20px;
+    }
+
+    .scroll4::-webkit-scrollbar-track {
+      background: #ddd;
+      border-radius: 20px;
+    }
+
+    .wrapper-border {
+      border-left: 1px solid #8e24aa;
+      border-right: 1px solid #8e24aa;
+      border-bottom: 1px solid #8e24aa;
+    }
+
     </style>
   </head>
-  <body style="height: 100%">
+  <body style="height: 100%;">
 
-    <div class="gradient-45deg-indigo-purple valign-wrapper" style="height: 80px;">
-      <h3 class="no-margin marg-left-2 white-text valign-wrapper center-align">HTTP OBJECTS EXCHANGED</h3>
+    <div class="gradient-45deg-indigo-purple valign-wrapper" style="height: 25px; -webkit-app-region: drag;">
+      <h8 class="no-margin marg-left-2 white-text valign-wrapper center-align">HTTP OBJECTS EXCHANGED</h8>
     </div>
 
-    <div class="row" style="height: 100%;">
-        <div id="left-panel" class="col s7" style="overflow-y: scroll; height: 100%">
-            <table class="highlight">
-                <thead>
-                  <tr>
-                      <th>Protocol</th>
-                      <th>Status</th>
-                      <th>Host</th>
-                      <th>Path</th>
-                      <th>Time</th>
-                  </tr>
-                </thead>
-
-                <tbody id="exchange-list-body">
-                </tbody>
-              </table>
-        </div>
-
-        <div id="right-panel" class="col s5">
-            <div class="card white-text">
-                <div class="card-content deep-purple darken-2">
-                   <p class="card-stats-title">Selection: <span id="selection">GET 200 OK HTTP 1.1</span></p>
+    <div id="main-wrapper" class="wrapper-border" style="height: 97%;">
+    
+        <div class="row" style="height: 100%;">
+            <div id="left-panel" class="col s7 scroll scroll4" style="overflow-y: scroll; height: 100%">
+                <table class="highlight">
+                    <thead>
+                      <tr>
+                          <th>Protocol</th>
+                          <th>Status</th>
+                          <th>Host</th>
+                          <th>Path</th>
+                          <th>Time</th>
+                      </tr>
+                    </thead>
+    
+                    <tbody id="exchange-list-body">
+                    </tbody>
+                  </table>
+            </div>
+    
+            <div id="right-panel" class="col s5">
+                <div class="card white-text">
+                    <div class="padding-10 card-content deep-purple darken-2">
+                      <p class="card-stats-title">Selection <span id="selection" class="bold"></span></p>
+                    </div>
+                    <div class="card-action">
+                        <button class="waves-effect waves-light btn-small red darken-3">CSV</button>
+                        <button class="waves-effect waves-light btn-small red darken-3">JSON</button>
+                        <button class="waves-effect waves-light btn-small red darken-3">XML</button>
+                    </div>
+                </div>
+    
+                <div class="card">
+                  <div class="padding-10 card-content deep-purple darken-2 white-text">
+                    <p class="card-stats-title bold">Request Headers</p>
+                  </div>
+                  <div class="card-tabs">
+                      <div class="" style="height:25px">
+                        <div class="col s6 pointer">
+                          <p class="no-margin grey-text darken-3 center-align" href="#test4">Formatted View</p>
+                        </div>
+                        <div class="col s6 pointer">
+                            <p class="no-margin grey-text darken-3 center-align" href="#test4">Raw View</p>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="card-action">
+                      <ul id="request-headers" class="collection scroll4" style="max-height: 200px; overflow-y: scroll;"></ul>
+                  </div>
+              </div>
+    
+              <div class="card">
+                <div class="padding-10 card-content deep-purple darken-2 white-text">
+                    <p class="card-stats-title bold">Response Headers</p>
+                </div>
+                <div class="card-tabs">
+                    <div class="" style="height:25px">
+                      <div class="col s6 pointer">
+                        <p class="no-margin grey-text darken-3 center-align" href="#test4">Formatted View</p>
+                      </div>
+                      <div class="col s6 pointer">
+                          <p class="no-margin grey-text darken-3 center-align" href="#test4">Raw View</p>
+                      </div>
+                    </div>
                 </div>
                 <div class="card-action">
-                    <button class="waves-effect waves-light btn-small red darken-3">CSV</button>
-                    <button class="waves-effect waves-light btn-small red darken-3">JSON</button>
-                    <button class="waves-effect waves-light btn-small red darken-3">XML</button>
+                    <ul id="response-headers" class="collection scroll4" style="max-height: 200px; overflow-y: scroll;"></ul>
                 </div>
-             </div>
-
-             <div class="card">
-              <div class="card-content deep-purple darken-2 white-text">
-                <p class="card-stats-title bold">Request Headers</p>
-              </div>
-              <div class="card-tabs">
-                  <ul class="tabs tabs-fixed-width tabs-transparent">
-                    <li class="tab"><a class="grey-text darken-3" href="#test4">Formatted View</a></li>
-                    <li class="tab"><a class="grey-text darken-3" href="#test5">Raw View</a></li>
-                  </ul>
-              </div>
-              <div class="card-action">
-                  <ul class="collection">
-                      <li class="collection-item">Content-Type: application/json</li>
-                      <li class="collection-item">Content-length: 34678</li>
-                      <li class="collection-item">server: Kestrel</li>
-                      <li class="collection-item">status: 200</li>
-                    </ul>
-              </div>
-           </div>
-
-           <div class="card">
-            <div class="card-content deep-purple darken-2 white-text">
-                <p class="card-stats-title bold">Response Headers</p>
             </div>
-            <div class="card-tabs">
-                <ul class="tabs tabs-fixed-width tabs-transparent">
-                  <li class="tab"><a class="grey-text darken-3" href="#test4">Formatted View</a></li>
-                  <li class="tab"><a class="grey-text darken-3" href="#test5">Raw View</a></li>
-                </ul>
             </div>
-            <div class="card-action">
-                <ul class="collection">
-                    <li class="collection-item">Content-Type: application/json</li>
-                    <li class="collection-item">Content-length: 34678</li>
-                    <li class="collection-item">server: Kestrel</li>
-                    <li class="collection-item">status: 200</li>
-                  </ul>
-            </div>
-         </div>
         </div>
     </div>
-
   </body>
 
   <script>
-    // Will be run in the renderer process
     require('../dist/renderer.js');
   </script>
 </html>

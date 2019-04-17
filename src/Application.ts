@@ -2,26 +2,33 @@ import { BrowserWindow } from "electron";
 import { join } from "path";
 import { MainEventManager, EventManager } from "./EventManager";
 import { Hash } from "./Utils/Collections";
+import { WebSocketClient } from "./Web/WebSocketClient";
+import { FakeServer } from "./Debug/FakeServer";
+import { HttpClient } from "./Web/HttpClient";
 
 export class Application {
-    private myName: String;
+    private myName: string;
     private mainWindow: BrowserWindow;
     private currentWindow: BrowserWindow;
 
     private eventHandlers: Hash<EventManager>;
+    private networkClient: WebSocketClient;
 
-    constructor(name: String) {
+    constructor(name: string) {
         this.myName = name;
         this.eventHandlers = {};
     }
 
     public createWindow(): BrowserWindow {
+        new FakeServer(true, (type: string, ws: any) => {/*console.log(type, ws);*/});
+
         return new BrowserWindow({
+            title: this.myName,
             height: 900,
             width: 1600,
-            frame: true,
+            frame: false,
             show: false,
-            backgroundColor: "#FFF"
+            backgroundColor: "#fafafa"
           });
     }
 
@@ -39,12 +46,16 @@ export class Application {
 
         this.eventHandlers[this.mainWindow.id] = new MainEventManager(this.mainWindow).startListening();
 
-        this.DEBUG_PUSH();
+        this.networkClient = new WebSocketClient('ws://localhost:8085', (json: any) => {
+            const manager = <MainEventManager>this.eventHandlers[this.mainWindow.id];
+            manager.pushExchangeData(json);
+        }, null);
     }
 
     public stopApplication(): void {
         this.currentWindow = null;
         this.mainWindow = null;
+        this.networkClient.stop();
 
         for (const key in this.eventHandlers) {
             if (this.eventHandlers.hasOwnProperty(key)) {
@@ -55,19 +66,5 @@ export class Application {
 
     public openDevTools() {
         this.currentWindow.webContents.openDevTools();
-    }
-
-    private DEBUG_PUSH(): void {
-        setInterval(() => {
-            const manager = <MainEventManager>this.eventHandlers[this.mainWindow.id];
-            manager.pushExchangeData({
-                uuid: "123553-AZER1235AEZRT-123EZR23FE2RFZREG",
-                protocol: "HTTP 1.1",
-                status: 200,
-                host: "www.2befficient.fr",
-                path: "/toto/1?no=yes",
-                time: 2598
-            });
-        }, 3000);
     }
 }

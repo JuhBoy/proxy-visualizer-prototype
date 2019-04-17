@@ -24,6 +24,7 @@
     "typescript": "^3.4.3"
   },
   "dependencies": {
-    "gulp-cli": "^2.1.0"
+    "gulp-cli": "^2.1.0",
+    "ws": "^6.2.1"
   }
 }

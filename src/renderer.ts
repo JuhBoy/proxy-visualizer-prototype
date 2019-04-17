@@ -1,16 +1,25 @@
+import { IExchangeContent } from "./Models/IExchangeContent";
+
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
 (function() {
-    const { ipcRenderer } = require("electron");
+    const { ipcRenderer, remote } = require("electron");
 
     const ipcFromMainHandler = function () {
-        const { ExchangeGenerator } = require('../dist/renderer-generator.js');
+        const { ExchangeGenerator, ExchangeContentGenerator } = require('../dist/renderer-generator.js');
+
         ipcRenderer.on("http-exchange-push", (event: any, arg: any) => {
             if (arg == undefined) return;
             const addedRow = new ExchangeGenerator("exchange-list-body", arg).flush();
             addExchangeListener(addedRow);
+        });
+
+        ipcRenderer.on("exchange-content", (event: any, exchangeContent: IExchangeContent) => {
+            if (exchangeContent == undefined) return;
+            const generator = new ExchangeContentGenerator(exchangeContent);
+            generator.flush();
         });
     }
 
@@ -25,14 +34,17 @@
         }, false);
     }
 
-    // DEBUG HERE KICK ME
-    const testBlock = function() {
-        ipcRenderer.on('test-block', (ev: any, arg: any) => {
-            console.log("pong recieved: ", ev, arg);
-        })
-    };
-    testBlock();
+    /**
+     * Resize the main wrapper for better visibility
+     * @param ev Event from listener
+     */
+    const onWindowResize = (ev: any) => {
+        let headerSizeInPixel = 25;
+        let size = remote.getCurrentWindow().getSize();
+        const wrapper: HTMLDivElement = document.querySelector('#main-wrapper');
+        wrapper.style.height = (size[1] - headerSizeInPixel) + 'px';
+    }
+    window.addEventListener('resize', (ev: any) => onWindowResize(ev));
 
     ipcFromMainHandler();
-    
 }());
