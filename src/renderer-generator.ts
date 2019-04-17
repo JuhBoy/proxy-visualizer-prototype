@@ -34,13 +34,13 @@ export class ExchangeGenerator {
         return child;
     }
 
-    buildTimeDom() {
+    private buildTimeDom() {
         const domElement = this.buildGenericNode(this.model.time.toString());
         domElement.innerText += " ms";
         return domElement;
     }
 
-    buildStatusDom() {
+    private buildStatusDom() {
         const domElement = document.createElement("td");
         const domSpan = document.createElement("span");
         const text = getTextForStatus(this.model.status);
@@ -52,6 +52,18 @@ export class ExchangeGenerator {
         domElement.appendChild(domSpan);
 
         return domElement;
+    }
+
+    private buildGenericNode(innerText: String) {
+        const domElement = document.createElement("td");
+        domElement.innerText = innerText.toString();
+        return domElement;
+    }
+
+    private addUUIDNodeAttribute(child: HTMLTableRowElement) {
+        const dataAttribute = document.createAttribute("data-uuid");
+        dataAttribute.value = this.model.uuid.toString();
+        child.setAttributeNode(dataAttribute);
     }
 
     private getStatusColor(): string {
@@ -67,53 +79,79 @@ export class ExchangeGenerator {
             return "red";
         }
     }
-
-    private buildGenericNode(innerText: String) {
-        const domElement = document.createElement("td");
-        domElement.innerText = innerText.toString();
-        return domElement;
-    }
-
-    private addUUIDNodeAttribute(child: HTMLTableRowElement) {
-        const dataAttribute = document.createAttribute("data-uuid");
-        dataAttribute.value = this.model.uuid.toString();
-        child.setAttributeNode(dataAttribute);
-    }
 }
 
 export class ExchangeContentGenerator {
 
+    static currentExchange: IExchangeContent;
     private content: IExchangeContent;
 
     public constructor(content: IExchangeContent) {
         this.content = content;
+        ExchangeContentGenerator.currentExchange = this.content;
     }
 
     public flush(): void {
+        const _static = ExchangeContentGenerator;
         const requestParent  = document.querySelector('#request-headers');
         const responseParent = document.querySelector('#response-headers');
         const selectionTitle = document.querySelector('#selection');
 
-        this.clear(requestParent, responseParent, selectionTitle);
+        ExchangeContentGenerator.clear(requestParent, responseParent, selectionTitle);
 
-        const requestRows  = this.buildFormattedHeaders(this.content.requestHeaders);
-        const responseRows = this.buildFormattedHeaders(this.content.responseHeaders);
+        const requestRows  = _static.buildFormattedHeaders(this.content.requestHeaders);
+        const responseRows = _static.buildFormattedHeaders(this.content.responseHeaders);
 
-        for (const row of requestRows)
-            requestParent.appendChild(row);
-        for (const row of responseRows)
-            responseParent.appendChild(row);
+        _static.appendRowsFormatted(requestRows, requestParent);
+        _static.appendRowsFormatted(responseRows, responseParent);
 
         selectionTitle.append(`${this.content.responseHeaders[0]}`);
     }
 
-    private clear(...elements: Element[]) {
+    public static switchPresentation(formatted: boolean, ancor: "#request-headers" | "#response-headers" | string): void {
+        const _static = ExchangeContentGenerator;
+        if (!_static.currentExchange) return;
+
+        const domElement = document.querySelector(ancor);
+        _static.clear(domElement);
+
+        let headers: string[] = [];
+        if (ancor.indexOf('response') != -1)
+            headers = _static.currentExchange.responseHeaders;
+        else
+            headers = _static.currentExchange.requestHeaders;
+
+        if (formatted) {
+            const rows = _static.buildFormattedHeaders(headers);
+            _static.appendRowsFormatted(rows, domElement);
+        } else {
+            _static.appendHeaderRaw(headers, domElement);
+        }
+    }
+
+    private static appendRowsFormatted(rows: HTMLLIElement[], domElement: Element) {
+        for (const row of rows)
+            domElement.appendChild(row);
+    }
+
+    private static appendHeaderRaw(headers: string[], domElement: Element) {
+        for (const header of headers) {
+            domElement.append(header);
+            domElement.appendChild(document.createElement('br'));
+        }
+    }
+
+    private static clear(...elements: Element[]) {
         for (let element of elements) {
             element.innerHTML = null;
         }
     }
 
-    buildFormattedHeaders(headers: string[]): HTMLLIElement[] {
+    public static clearCache() {
+        ExchangeContentGenerator.currentExchange = undefined;
+    }
+
+    private static buildFormattedHeaders(headers: string[]): HTMLLIElement[] {
         let elements: HTMLLIElement[] = [];
 
         for (let i = 0; i < headers.length; i++) {
@@ -131,7 +169,7 @@ export class ExchangeContentGenerator {
         return elements;
     }
 
-    formatLiHeaderContent(headerStr: string): HTMLSpanElement {
+    private static formatLiHeaderContent(headerStr: string): HTMLSpanElement {
         let index = headerStr.indexOf(':') + 1;
         let left = headerStr.substring(0, index);
         let right = headerStr.substring(index, headerStr.length);

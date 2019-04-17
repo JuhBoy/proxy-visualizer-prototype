@@ -129,7 +129,7 @@ export class FakeServer {
                 }
             });
             i++;
-        }, 3_000);
+        }, 250);
 
     }
 
