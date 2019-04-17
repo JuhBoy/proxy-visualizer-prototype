@@ -5,8 +5,8 @@ import { ExchangeContentGenerator } from "./renderer-generator";
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
-window.onload = function() {
-    const { ipcRenderer, remote } = require("electron");
+export function Init() {
+    const { ipcRenderer } = require("electron");
 
     /**
      * INIT SUBSCRIPTIONS TO IPC TRANSFERS
@@ -47,18 +47,6 @@ window.onload = function() {
 
         }, false);
     }
-
-    /**
-     * Resize the main wrapper for better visibility
-     * @param ev Event from listener
-     */
-    const onWindowResize = (ev: any) => {
-        let headerSizeInPixel = 25;
-        let size = remote.getCurrentWindow().getSize();
-        const wrapper: HTMLDivElement = document.querySelector('#main-wrapper');
-        wrapper.style.height = (size[1] - headerSizeInPixel) + 'px';
-    }
-    window.addEventListener('resize', (ev: any) => onWindowResize(ev));
 
     /**
      * Change headers view from Formatted to Raw

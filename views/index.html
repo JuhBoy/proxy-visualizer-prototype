@@ -84,13 +84,46 @@
       border-bottom: 1px solid #8e24aa;
     }
 
+    .btn-floating.btn-small {
+      cursor: default;
+      z-index: 9999;
+      width: 10px;
+      height: 10px;
+    }
+
+    .absolute-3 {
+      position: absolute;
+      right: 65px;
+      top: 8px;
+    }
+
+    .absolute-2 {
+      position: absolute;
+      right: 45px;
+      top: 8px;
+    }
+
+    .absolute-1 {
+      position: absolute;
+      right: 25px;
+      top: 8px;
+    }
+
+    h1, h2, h3, h4, h5, h6, a, p, span, div, table, tr, td, thead {
+      -webkit-app-region: no-drag; 
+      -webkit-user-select: none;
+    }
+
     </style>
   </head>
-  <body style="height: 100%;">
+  <body style="height: 100%; -webkit-app-region: drag; ">
 
-    <div class="gradient-45deg-indigo-purple valign-wrapper" style="height: 25px; -webkit-app-region: drag;">
+    <header class="gradient-45deg-indigo-purple valign-wrapper" style="height: 25px; z-index: 0;">
       <h8 class="no-margin marg-left-2 white-text valign-wrapper center-align">HTTP OBJECTS EXCHANGED</h8>
-    </div>
+      <a id="minimize-window-btn" class="btn-floating btn-small absolute-3"><i class="">-</i></a>
+      <a id="maximize-window-btn" class="btn-floating btn-small yellow absolute-2"><i class="">o</i></a>
+      <a id="close-window-btn" class="btn-floating btn-small red absolute-1"><i class="">x</i></a>
+    </header>
 
     <div id="main-wrapper" class="wrapper-border" style="height: 97%;">
     
@@ -167,6 +200,12 @@
   </body>
 
   <script>
-    require('../dist/renderer.js');
+    const globalInit = require('../dist/global-renderer.js').Init;
+    const wRendererInit = require('../dist/renderer.js').Init;
+
+    window.onload = () => {
+      globalInit();
+      wRendererInit();
+    }
   </script>
 </html>
