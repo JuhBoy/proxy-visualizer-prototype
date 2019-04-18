@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html style="height: 100%; overflow: hidden">
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <style>
-      .be-badge {
-        font-weight: 300;
-        font-size: 0.8rem;
-        color: #fff;
-        border-radius: 2px; padding:5px;
-      }
 
-      #left-panel table tbody tr td {
-        cursor: pointer;
-      }
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>
+    .be-badge {
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: #fff;
+      border-radius: 2px;
+      padding: 5px;
+    }
 
-      .pointer {
-        cursor: pointer;
-      }
+    #left-panel table tbody tr td {
+      cursor: pointer;
+    }
+
+    .pointer {
+      cursor: pointer;
+    }
 
     .gradient-45deg-indigo-purple {
       background: #303f9f;
@@ -48,7 +50,8 @@
       padding: 2px 20px;
     }
 
-    td, th {
+    td,
+    th {
       padding: 6px 0px;
     }
 
@@ -67,7 +70,7 @@
     .scroll4::-webkit-scrollbar {
       width: 10px;
     }
- 
+
     .scroll4::-webkit-scrollbar-thumb {
       background: #666;
       border-radius: 20px;
@@ -109,103 +112,117 @@
       top: 8px;
     }
 
-    h1, h2, h3, h4, h5, h6, a, p, span, div, table, tr, td, thead {
-      -webkit-app-region: no-drag; 
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    a,
+    p,
+    span,
+    div,
+    table,
+    tr,
+    td,
+    thead {
+      -webkit-app-region: no-drag;
       -webkit-user-select: none;
     }
+  </style>
+</head>
 
-    </style>
-  </head>
-  <body style="height: 100%; -webkit-app-region: drag; ">
+<body style="height: 100%; -webkit-app-region: drag; ">
 
-    <header class="gradient-45deg-indigo-purple valign-wrapper" style="height: 25px; z-index: 0;">
-      <h8 class="no-margin marg-left-2 white-text valign-wrapper center-align">HTTP OBJECTS EXCHANGED</h8>
-      <a id="minimize-window-btn" class="btn-floating btn-small absolute-3"><i class="">-</i></a>
-      <a id="maximize-window-btn" class="btn-floating btn-small yellow absolute-2"><i class="">o</i></a>
-      <a id="close-window-btn" class="btn-floating btn-small red absolute-1"><i class="">x</i></a>
-    </header>
+  <header class="gradient-45deg-indigo-purple valign-wrapper" style="height: 25px; z-index: 0;">
+    <h8 class="no-margin marg-left-2 white-text valign-wrapper center-align">HTTP OBJECTS EXCHANGED</h8>
+    <a id="minimize-window-btn" class="btn-floating btn-small absolute-3"><i class="">-</i></a>
+    <a id="maximize-window-btn" class="btn-floating btn-small yellow absolute-2"><i class="">o</i></a>
+    <a id="close-window-btn" class="btn-floating btn-small red absolute-1"><i class="">x</i></a>
+  </header>
 
-    <div id="main-wrapper" class="wrapper-border" style="height: 97%;">
-    
-        <div class="row" style="height: 100%;">
-            <div id="left-panel" class="col s7 scroll scroll4" style="overflow-y: scroll; height: 100%">
-                <table class="highlight">
-                    <thead>
-                      <tr>
-                          <th>Protocol</th>
-                          <th>Status</th>
-                          <th>Host</th>
-                          <th>Path</th>
-                          <th>Time</th>
-                      </tr>
-                    </thead>
-    
-                    <tbody id="exchange-list-body">
-                    </tbody>
-                  </table>
-            </div>
-    
-            <div id="right-panel" class="col s5">
-                <div class="card white-text">
-                    <div class="padding-10 card-content deep-purple darken-2">
-                      <p class="card-stats-title">Selection <span id="selection" class="bold"></span></p>
-                    </div>
-                    <div class="card-action">
-                        <button class="waves-effect waves-light btn-small red darken-3">CSV</button>
-                        <button class="waves-effect waves-light btn-small red darken-3">JSON</button>
-                        <button class="waves-effect waves-light btn-small red darken-3">XML</button>
-                    </div>
-                </div>
-    
-                <div class="card">
-                  <div class="padding-10 card-content deep-purple darken-2 white-text">
-                    <p class="card-stats-title bold">Request Headers</p>
-                  </div>
-                  <div class="card-tabs">
-                      <div style="height:25px">
-                        <div class="toggle-view-content col s6 pointer" data-type="request-headers" data-formatted="F">
-                          <p class="no-margin grey-text darken-3 center-align" href="#test4">Formatted View</p>
-                        </div>
-                        <div class="toggle-view-content col s6 pointer" data-type="request-headers" data-formatted="R">
-                            <p class="no-margin grey-text darken-3 center-align" href="#test4">Raw View</p>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="card-action">
-                      <ul id="request-headers" class="collection scroll4" style="max-height: 200px; overflow-y: scroll;"></ul>
-                  </div>
-              </div>
-    
-              <div class="card">
-                <div class="padding-10 card-content deep-purple darken-2 white-text">
-                    <p class="card-stats-title bold">Response Headers</p>
-                </div>
-                <div class="card-tabs">
-                    <div class="" style="height:25px">
-                      <div class="toggle-view-content col s6 pointer" data-type="response-headers" data-formatted="F">
-                        <p class="no-margin grey-text darken-3 center-align" href="#test4">Formatted View</p>
-                      </div>
-                      <div class="toggle-view-content col s6 pointer" data-type="response-headers" data-formatted="R">
-                          <p class="no-margin grey-text darken-3 center-align" href="#test4">Raw View</p>
-                      </div>
-                    </div>
-                </div>
-                <div class="card-action">
-                    <ul id="response-headers" class="collection scroll4" style="max-height: 200px; overflow-y: scroll;"></ul>
-                </div>
-            </div>
-            </div>
+  <div id="main-wrapper" class="wrapper-border" style="height: 97%;">
+
+    <div class="row" style="height: 100%;">
+      <div id="left-panel" class="col s7 scroll scroll4" style="overflow-y: scroll; height: 100%">
+        <table class="highlight">
+          <thead>
+            <tr>
+              <th>Protocol</th>
+              <th>Status</th>
+              <th>Host</th>
+              <th>Path</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+
+          <tbody id="exchange-list-body">
+          </tbody>
+        </table>
+      </div>
+
+      <div id="right-panel" class="col s5">
+        <div class="card white-text">
+          <div class="padding-10 card-content deep-purple darken-2">
+            <p class="card-stats-title">Selection <span id="selection" class="bold"></span></p>
+          </div>
+          <div class="card-action">
+            <button class="waves-effect waves-light btn-small red darken-3">CSV</button>
+            <button class="waves-effect waves-light btn-small red darken-3">JSON</button>
+            <button class="waves-effect waves-light btn-small red darken-3">XML</button>
+          </div>
         </div>
+
+        <div class="card">
+          <div class="padding-10 card-content deep-purple darken-2 white-text">
+            <p class="card-stats-title bold">Request Headers</p>
+          </div>
+          <div class="card-tabs">
+            <div style="height:25px">
+              <div class="toggle-view-content col s6 pointer" data-type="request-headers" data-formatted="F">
+                <p class="no-margin grey-text darken-3 center-align" href="#test4">Formatted View</p>
+              </div>
+              <div class="toggle-view-content col s6 pointer" data-type="request-headers" data-formatted="R">
+                <p class="no-margin grey-text darken-3 center-align" href="#test4">Raw View</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-action">
+            <ul id="request-headers" class="collection scroll4" style="max-height: 200px; overflow-y: scroll;"></ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="padding-10 card-content deep-purple darken-2 white-text">
+            <p class="card-stats-title bold">Response Headers</p>
+          </div>
+          <div class="card-tabs">
+            <div class="" style="height:25px">
+              <div class="toggle-view-content col s6 pointer" data-type="response-headers" data-formatted="F">
+                <p class="no-margin grey-text darken-3 center-align" href="#test4">Formatted View</p>
+              </div>
+              <div class="toggle-view-content col s6 pointer" data-type="response-headers" data-formatted="R">
+                <p class="no-margin grey-text darken-3 center-align" href="#test4">Raw View</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-action">
+            <ul id="response-headers" class="collection scroll4" style="max-height: 200px; overflow-y: scroll;"></ul>
+          </div>
+        </div>
+      </div>
     </div>
-  </body>
+  </div>
+</body>
 
-  <script>
-    const globalInit = require('../dist/global-renderer.js').Init;
-    const wRendererInit = require('../dist/renderer.js').Init;
+<script>
+  const globalInit = require('../dist/global-renderer.js').Init;
+  const wRendererInit = require('../dist/renderer.js').Init;
 
-    window.onload = () => {
-      globalInit();
-      wRendererInit();
-    }
-  </script>
+  window.onload = () => {
+    globalInit();
+    wRendererInit();
+  }
+</script>
+
 </html>

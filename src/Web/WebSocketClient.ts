@@ -12,14 +12,14 @@ export class WebSocketClient {
         if (onMessage) {
             this.socket.on('message', (data: any) => {
                 let jsonObject;
-    
+
                 try {
                     jsonObject = JSON.parse(data);
                 } catch (exception) {
                     console.log(exception);
                     return;
                 }
-    
+
                 onMessage(jsonObject);
             });
         }

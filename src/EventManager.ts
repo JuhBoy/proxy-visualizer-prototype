@@ -55,10 +55,10 @@ export class MainEventManager extends EventManager {
         const { uuid } = args;
 
         const query = { hostname: 'localhost', port: 8887, path: `get-exchange-content?uuid=${uuid}` };
-        
+
         HttpClient.Request<IExchangeContent>(query, (status: number, exchangeContent: IExchangeContent) => {
             if (status != 200 || exchangeContent == undefined) { /* TODO: Call error frame */ return; }
             this.window.webContents.send('exchange-content', exchangeContent);
-         }, true);
+        }, true);
     }
 }

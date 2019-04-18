@@ -2,17 +2,17 @@ const Websocket = require('ws');
 const Http = require('http');
 
 export class FakeServer {
-    
+
     handle: Function;
     wss: any;
     started: boolean;
     sockets: any[];
     sampleBase: any;
     generatedSample: any;
-    
+
     public constructor(startNow: boolean, handle: Function) {
         if (startNow)
-        this.sampleBase = { uuid: "123553-AZER1235AEZRT-123EZR23FE2RFZREG", protocol: "HTTP 1.1", status: 200, host: "www.2befficient.fr", path: "/toto/1?no=yes", time: 2598 };
+            this.sampleBase = { uuid: "123553-AZER1235AEZRT-123EZR23FE2RFZREG", protocol: "HTTP 1.1", status: 200, host: "www.2befficient.fr", path: "/toto/1?no=yes", time: 2598 };
         this.generatedSample = {};
         this.startWebsocketServer();
         this.startHttpServer();
@@ -73,8 +73,8 @@ export class FakeServer {
                 'x-statuspage-version: 1d310a1c3a4143d50346e3b741a147d97b49f323',
                 'x-xss-protection: 1; mode=block',
             ],
-            'requestBody': [255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65],
-            'responseBody': [255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65,255, 12, 0, 145, 65]
+            'requestBody': [255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65],
+            'responseBody': [255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65]
         }
 
         const server = Http.createServer((req: any, res: any) => {

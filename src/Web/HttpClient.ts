@@ -2,7 +2,7 @@ import { net, ClientRequest } from 'electron';
 import { IExchangeContent } from '../Models/IExchangeContent';
 
 export class HttpClient {
-    
+
     public static Request<T>(options: Object, handle: Function, tojson: boolean = true) {
         const requestOptions: Object = {
             method: 'GET',
@@ -18,10 +18,10 @@ export class HttpClient {
         request.on('response', (response) => {
             const headers: any = JSON.stringify(response.headers);
             const status = response.statusCode;
-            
+
             response.on('data', (chunk: Buffer) => {
                 if (tojson) {
-                    const data = <T>JSON.parse(chunk.toString());
+                    const data = <T> JSON.parse(chunk.toString());
                     handle(status, data);
                 } else {
                     handle(status, chunk.toString());
@@ -30,6 +30,6 @@ export class HttpClient {
         });
 
         request.end();
-     }
+    }
 
 }

@@ -1,7 +1,7 @@
 
 export function Init() {
     const { remote } = require("electron");
-    
+
     /**
      * Resize the main wrapper for better visibility
      * @param ev Event from listener

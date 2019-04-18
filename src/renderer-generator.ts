@@ -8,8 +8,8 @@ export class ExchangeGenerator {
 
     public flush(): HTMLTableRowElement {
         const parent = document.getElementById(this.parentId.toString());
-        
-        if (parent == undefined) 
+
+        if (parent == undefined)
             throw new Error("Parent not found: " + this.parentId);
 
         const child = document.createElement("tr");
@@ -93,13 +93,13 @@ export class ExchangeContentGenerator {
 
     public flush(): void {
         const _static = ExchangeContentGenerator;
-        const requestParent  = document.querySelector('#request-headers');
+        const requestParent = document.querySelector('#request-headers');
         const responseParent = document.querySelector('#response-headers');
         const selectionTitle = document.querySelector('#selection');
 
         ExchangeContentGenerator.clear(requestParent, responseParent, selectionTitle);
 
-        const requestRows  = _static.buildFormattedHeaders(this.content.requestHeaders);
+        const requestRows = _static.buildFormattedHeaders(this.content.requestHeaders);
         const responseRows = _static.buildFormattedHeaders(this.content.responseHeaders);
 
         _static.appendRowsFormatted(requestRows, requestParent);

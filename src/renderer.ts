@@ -11,7 +11,7 @@ export function Init() {
     /**
      * INIT SUBSCRIPTIONS TO IPC TRANSFERS
      */
-    const ipcFromMainHandler = function () {
+    const ipcFromMainHandler = function() {
         const { ExchangeGenerator } = require('../dist/renderer-generator.js');
 
         /**
