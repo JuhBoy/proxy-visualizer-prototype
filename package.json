@@ -6,10 +6,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "gulp-lint": "gulp",
     "auto-formatt": "tsfmt -r",
-    "start-old": "npm run build && electron ./dist/main.js",
-    "start": "gulp && electron ./dist/main.js"
+    "start-min": "gulp && electron ./build/main.js",
+    "start-debug": "gulp && electron ./dist/main.js"
   },
   "repository": "N/A",
   "keywords": [
@@ -21,6 +20,7 @@
   "devDependencies": {
     "electron": ">=2.0.8",
     "gulp": "^4.0.0",
+    "gulp-minify": "^3.1.0",
     "gulp-tslint": "^8.1.4",
     "gulp-typescript": "^5.0.1",
     "tslint": "^5.16.0",

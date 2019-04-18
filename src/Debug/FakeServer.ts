@@ -73,8 +73,8 @@ export class FakeServer {
                 'x-statuspage-version: 1d310a1c3a4143d50346e3b741a147d97b49f323',
                 'x-xss-protection: 1; mode=block',
             ],
-            'requestBody': [255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65],
-            'responseBody': [255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65, 255, 12, 0, 145, 65]
+            'requestBody': [0x7b, 0x20, 0x22, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x22, 0x3a, 0x20, 0x22, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x22, 0x20, 0x7d],
+            'responseBody': [0x7b, 0x20, 0x22, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x22, 0x3a, 0x20, 0x22, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x22, 0x20, 0x7d]
         }
 
         const server = Http.createServer((req: any, res: any) => {
@@ -129,7 +129,7 @@ export class FakeServer {
                 }
             });
             i++;
-        }, 250);
+        }, 1_000);
 
     }
 

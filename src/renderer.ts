@@ -1,5 +1,5 @@
 import { IExchangeContent } from "./Models/IExchangeContent";
-import { ExchangeContentGenerator } from "./renderer-generator";
+import { ExchangeContentGenerator, ExchangeGenerator } from "./renderer-generator";
 
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
@@ -12,8 +12,6 @@ export function Init() {
      * INIT SUBSCRIPTIONS TO IPC TRANSFERS
      */
     const ipcFromMainHandler = function() {
-        const { ExchangeGenerator } = require('../dist/renderer-generator.js');
-
         /**
          * EXCHANGE HTTP PUSH ROW
          */
@@ -58,7 +56,7 @@ export function Init() {
         const type: string = ev.currentTarget.getAttribute('data-type');
         const tRaw: boolean = ev.currentTarget.getAttribute('data-formatted') === "F";
 
-        ExchangeContentGenerator.switchPresentation(tRaw, `#${type}`);
+        ExchangeContentGenerator.switchPresentation(tRaw, type);
     }
     document.querySelectorAll(".toggle-view-content").forEach((domDiv: HTMLDivElement) => {
         domDiv.addEventListener("click", (ev: any) => onRequestResponseTabsClicked(ev), false);
