@@ -1,9 +1,10 @@
 import { BrowserWindow } from "electron";
 import { join } from "path";
-import { MainEventManager, EventManager } from "./EventManager";
+import { MainEventManager, EventManager } from "./include/EventManager";
 import { Hash } from "./Utils/Collections";
 import { WebSocketClient } from "./Web/WebSocketClient";
 import { FakeServer } from "./Debug/FakeServer";
+import { ApplicationState } from "./ApplicationState";
 
 export class Application {
     private myName: string;
@@ -16,6 +17,7 @@ export class Application {
     constructor(name: string) {
         this.myName = name;
         this.eventHandlers = {};
+        ApplicationState.instance().setAlive(false);
     }
 
     public createWindow(): BrowserWindow {
@@ -25,6 +27,8 @@ export class Application {
             title: this.myName,
             height: 900,
             width: 1600,
+            minWidth: 1000,
+            minHeight: 800,
             frame: false,
             show: false,
             backgroundColor: "#fafafa"
@@ -49,6 +53,8 @@ export class Application {
             const manager = <MainEventManager> this.eventHandlers[this.mainWindow.id];
             manager.pushExchangeData(json);
         }, null);
+
+        ApplicationState.instance().setAlive(true);
     }
 
     public stopApplication(): void {
@@ -61,6 +67,8 @@ export class Application {
                 this.eventHandlers[key].stopListening();
             }
         }
+
+        ApplicationState.instance().setAlive(false);
     }
 
     public openDevTools() {

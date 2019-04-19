@@ -145,5 +145,11 @@ export class ExchangeContentGenerator {
 
     public static clearCache() {
         ExchangeContentGenerator.currentExchange = undefined;
+
+        const request: Element = document.querySelector(ExchangeContentGenerator.REQUEST_KEY);
+        const response: Element = document.querySelector(ExchangeContentGenerator.RESPONSE_KEY);
+        const selection: Element = document.querySelector(ExchangeContentGenerator.SELECTION_KEY);
+
+        ExchangeContentGenerator.clear(request, response, selection);
     }
 }

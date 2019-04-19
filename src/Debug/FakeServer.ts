@@ -9,6 +9,7 @@ export class FakeServer {
     sockets: any[];
     sampleBase: any;
     generatedSample: any;
+    listen: boolean;
 
     public constructor(startNow: boolean, handle: Function) {
         if (startNow)
@@ -77,14 +78,41 @@ export class FakeServer {
             'responseBody': [0x7b, 0x20, 0x22, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x22, 0x3a, 0x20, 0x22, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x22, 0x20, 0x7d]
         }
 
+        const rrr: any = {
+            header: "Listening started",
+            content: "The listening has started"
+        };
+
         const server = Http.createServer((req: any, res: any) => {
             res.writeHead(200, { 'Content-Type': 'application/json', 'Content-Encoding': 'UTF-8' });
             const { url } = req;
-            const index = url.indexOf('?uuid=');
-            responseObj.uuid = url.substring(index + 6, url.length);
-            responseObj.responseHeaders[0] = `HTTP/1.1 ${this.generatedSample[responseObj.uuid].status} OK`;
 
-            res.write(JSON.stringify(responseObj));
+            console.log("[FAKE_SERVER]: ", url);
+
+            if (url.indexOf('start-listening') > -1) {
+                this.listen = true;
+                res.write(JSON.stringify(rrr));
+            } else if (url.indexOf('stop-listening') > -1) {
+                this.listen = false;
+                rrr.header = "Listening stopped";
+                rrr.content = "listening has stopped";
+                res.write(JSON.stringify(rrr));
+            } else if (url.indexOf('new') > -1) {
+                this.listen = false;
+                res.write(JSON.stringify({ header: 'New tmp file launched', content: 'a new file ...' }));
+            } else if (url.indexOf('open') > -1) {
+                this.listen = false;
+                res.write(JSON.stringify({ header: 'Open file', content: 'Open file damni it' }));
+            } else if (url.indexOf('get-current-exchange-list') > -1) {
+                this.listen = false;
+                res.write(JSON.stringify([ this.sampleBase, this.sampleBase, this.sampleBase, this.sampleBase, this.sampleBase ]));
+            } else {
+                const index = url.indexOf('?uuid=');
+                responseObj.uuid = url.substring(index + 6, url.length);
+                responseObj.responseHeaders[0] = `HTTP/1.1 ${this.generatedSample[responseObj.uuid].status} OK`;
+                res.write(JSON.stringify(responseObj));
+            }
+
             res.end();
         });
         server.listen(8887);
@@ -112,6 +140,8 @@ export class FakeServer {
         const cachedKeys = Object.keys(cachedStatus);
 
         setInterval(() => {
+            if (!this.listen) return;
+            
             this.sockets.forEach((ws: any, index: number) => {
                 if (ws.readyState == 1) {
                     const reandomIndex = Math.floor(Math.random() * (cachedKeys.length - 1));

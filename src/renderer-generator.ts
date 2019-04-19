@@ -1,2 +1,3 @@
-export * from './HtmlGenerators/ExchangeGenerator';
-export * from './HtmlGenerators/ExchangeContentGenerator';
+export * from './Renderer/ExchangeGenerator';
+export * from './Renderer/ExchangeContentGenerator';
+export * from './Renderer/UICommandManager';

@@ -3,13 +3,15 @@ import { IHttpExchange } from "../Models/IHttpExchange";
 
 export class ExchangeGenerator {
 
-    constructor(private parentId: String, private model: IHttpExchange) { }
+    public static parentId = '#exchange-list-body';
+
+    constructor(private model: IHttpExchange) { }
 
     public flush(): HTMLTableRowElement {
-        const parent = document.getElementById(this.parentId.toString());
+        const parent = document.querySelector(ExchangeGenerator.parentId);
 
         if (parent == undefined)
-            throw new Error("Parent not found: " + this.parentId);
+            throw new Error("Parent not found: " + ExchangeGenerator.parentId);
 
         const child = document.createElement("tr");
         child.classList.add("exchange-element");
@@ -33,6 +35,11 @@ export class ExchangeGenerator {
         return child;
     }
 
+    public static clear() {
+        const domElement = document.querySelector(ExchangeGenerator.parentId);
+        domElement.innerHTML = null;
+    }
+
     private buildTimeDom() {
         const domElement = this.buildGenericNode(this.model.time.toString());
         domElement.innerText += " ms";
@@ -47,21 +54,21 @@ export class ExchangeGenerator {
         domSpan.classList.add("be-badge");
         domSpan.classList.add(this.getStatusColor());
         domSpan.classList.add("bold");
-        domSpan.innerText = text.toString();
+        domSpan.innerText = text;
         domElement.appendChild(domSpan);
 
         return domElement;
     }
 
-    private buildGenericNode(innerText: String) {
+    private buildGenericNode(innerText: string) {
         const domElement = document.createElement("td");
-        domElement.innerText = innerText.toString();
+        domElement.innerText = innerText;
         return domElement;
     }
 
     private addUUIDNodeAttribute(child: HTMLTableRowElement) {
         const dataAttribute = document.createAttribute("data-uuid");
-        dataAttribute.value = this.model.uuid.toString();
+        dataAttribute.value = this.model.uuid;
         child.setAttributeNode(dataAttribute);
     }
 
@@ -79,7 +86,7 @@ export class ExchangeGenerator {
         }
     }
 
-    private static getTextForStatus(status: number): String {
+    private static getTextForStatus(status: number): string {
         let statusLine = `${status.toString()} ${StatusCodeLine[status.toString()]}`;
         return statusLine;
     }

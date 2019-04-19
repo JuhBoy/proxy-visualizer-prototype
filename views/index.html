@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Hello World!</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <style>
     .be-badge {
       font-weight: 300;
@@ -129,19 +130,61 @@
       -webkit-app-region: no-drag;
       -webkit-user-select: none;
     }
+
+    #menu-button-container div:hover {
+      border: 1px solid #aaaf;
+      transition: 0.2s;
+    }
+
+    #menu-button-container div {
+      transition: 0.08s;
+      width: 60px;
+    }
+
+    #menu-button-container div i {
+      width: 100%;
+    }
   </style>
 </head>
 
 <body style="height: 100%; -webkit-app-region: drag; ">
 
   <header class="gradient-45deg-indigo-purple valign-wrapper" style="height: 25px; z-index: 0;">
-    <h8 class="no-margin marg-left-2 white-text valign-wrapper center-align">HTTP OBJECTS EXCHANGED</h8>
+    <h8 class="no-margin marg-left-2 white-text valign-wrapper center-align">HTTP OBJECTS EXCHANGED VIZUALIZER</h8>
     <a id="minimize-window-btn" class="btn-floating btn-small absolute-3"><i class="">-</i></a>
     <a id="maximize-window-btn" class="btn-floating btn-small yellow absolute-2"><i class="">o</i></a>
     <a id="close-window-btn" class="btn-floating btn-small red absolute-1"><i class="">x</i></a>
   </header>
 
   <div id="main-wrapper" class="wrapper-border" style="height: 97%;">
+    
+    <article id="menu-button-container" class="row grey darken-3 no-margin valign-wrapper padding-10" style="height: 50px;">
+      <div data-type="new">
+        <i class="fas fa-file white-text center-align"></i>
+        <p class="no-margin white-text center-align">New</p>
+      </div>
+      <div data-type="open">
+        <i class="fas fa-folder-open orange-text center-align"></i>
+        <p class="no-margin white-text center-align">Open</p>
+      </div>
+      <div data-type="save">
+        <i class="fas fa-save blue-text text-lighten-1 center-align"></i>
+        <p class="no-margin white-text center-align">Save</p>
+      </div>
+      <div data-type="save-as">
+        <i class="fas fa-file-export blue-text text-lighten-2 center-align"></i>
+        <p class="no-margin white-text center-align">Save As</p>
+      </div>
+      <div><!-- SPACER --></div>
+      <div class="bb" data-type="start">
+        <i class="fas fa-play green-text text-lighten-1 center-align"></i>
+        <p class="no-margin white-text center-align">Start</p>
+      </div>
+      <div data-type="stop">
+        <i class="fas fa-stop red-text text-lighten-1 center-align"></i>
+        <p class="no-margin white-text center-align">Stop</p>
+      </div>
+    </article>
 
     <div class="row" style="height: 100%;">
       <div id="left-panel" class="col s7 scroll scroll4" style="overflow-y: scroll; height: 100%">
@@ -167,9 +210,9 @@
             <p class="card-stats-title">Selection <span id="selection" class="bold"></span></p>
           </div>
           <div class="card-action">
-            <button class="waves-effect waves-light btn-small red darken-3">CSV</button>
-            <button class="waves-effect waves-light btn-small red darken-3">JSON</button>
-            <button class="waves-effect waves-light btn-small red darken-3">XML</button>
+            <button class="waves-effect waves-light btn-small red darken-3"><i class="fas fa-file-csv"></i> CSV</button>
+            <button class="waves-effect waves-light btn-small red darken-3"><i class="fab fa-js"></i> JSON</button>
+            <button class="waves-effect waves-light btn-small red darken-3"><i class="fas fa-file-code"></i> XML</button>
           </div>
         </div>
 
@@ -219,6 +262,8 @@
       </div>
     </div>
   </div>
+
+  <div id="message-container"></div>
 </body>
 
 <script>

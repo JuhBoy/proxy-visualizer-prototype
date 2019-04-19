@@ -1,12 +1,16 @@
 import { IExchangeContent } from "./Models/IExchangeContent";
 import { ExchangeContentGenerator, ExchangeGenerator } from "./renderer-generator";
+import { ipcRenderer } from 'electron';
+import { IEventMessage } from "./Models/IEventMessage";
+import { IHttpExchange } from "./Models/IHttpExchange";
+import { CommandType } from "./Models/ICommand";
+import { UICommandManager } from "./Renderer/UICommandManager";
 
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
 export function Init() {
-    const { ipcRenderer } = require("electron");
 
     /**
      * INIT SUBSCRIPTIONS TO IPC TRANSFERS
@@ -15,19 +19,36 @@ export function Init() {
         /**
          * EXCHANGE HTTP PUSH ROW
          */
-        ipcRenderer.on("http-exchange-push", (event: any, arg: any) => {
-            if (arg == undefined) return;
-            const addedRow = new ExchangeGenerator("exchange-list-body", arg).flush();
+        ipcRenderer.on("http-exchange-push", (event: any, exchange: IHttpExchange) => {
+            const addedRow = new ExchangeGenerator(exchange).flush();
             addExchangeListener(addedRow);
+        });
+
+        /**
+         * EXCHANGE HTTP PUSH ROWS
+         */
+        ipcRenderer.on('http-exchange-batch-push', (_: any, exchanges: IHttpExchange[]) => {
+            for (const exchange of exchanges) {
+                const addedRow = new ExchangeGenerator(exchange).flush();
+                addExchangeListener(addedRow);
+            }
         });
 
         /**
          * EXCHANGE CONTENT
          */
-        ipcRenderer.on("exchange-content", (event: any, exchangeContent: IExchangeContent) => {
+        ipcRenderer.on("exchange-content", (_: any, exchangeContent: IExchangeContent) => {
             if (exchangeContent == undefined) return;
             const generator = new ExchangeContentGenerator(exchangeContent);
             generator.flush();
+        });
+
+        /**
+         * COMMUNICATION IPC MAIN HANDLER
+         */
+        ipcRenderer.on('serve-ipc-message', (_: any, message: IEventMessage) => {
+            const manager = new UICommandManager(message.command);
+            manager.play();
         });
     }
 
@@ -42,7 +63,6 @@ export function Init() {
             const domTarget = event.currentTarget;
             const uuid = domTarget.getAttribute('data-uuid');
             ipcRenderer.send("http-exchange-click", { uuid: uuid });
-
         }, false);
     }
 
@@ -60,6 +80,19 @@ export function Init() {
     }
     document.querySelectorAll(".toggle-view-content").forEach((domDiv: HTMLDivElement) => {
         domDiv.addEventListener("click", (ev: any) => onRequestResponseTabsClicked(ev), false);
+    });
+
+    /**
+     * Request a menu-action to the main process
+     * @param ev MouseEvent from listener
+     */
+    const onMenuItemClick = (ev: any) => {
+        const domElement = ev.currentTarget;
+        const type = domElement.getAttribute('data-type');
+        ipcRenderer.send(`menu-action`, type);
+    }
+    document.querySelectorAll('#menu-button-container div').forEach((menuItem: HTMLDivElement) => {
+        menuItem.addEventListener('click', (ev: any) => { onMenuItemClick(ev); });
     });
 
     ipcFromMainHandler();
