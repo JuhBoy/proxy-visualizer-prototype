@@ -1,10 +1,10 @@
 import { IExchangeContent } from "./Models/IExchangeContent";
 import { ExchangeContentGenerator, ExchangeGenerator } from "./renderer-generator";
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, BrowserWindow } from 'electron';
 import { IEventMessage } from "./Models/IEventMessage";
 import { IHttpExchange } from "./Models/IHttpExchange";
-import { CommandType } from "./Models/ICommand";
 import { UICommandManager } from "./Renderer/UICommandManager";
+import { writeFile } from "fs";
 
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
@@ -96,4 +96,25 @@ export function Init() {
     });
 
     ipcFromMainHandler();
+}
+
+/**
+ * Add A listener click on a HTMLElement.
+ * Use with care, references to the 'content' is boxed inside the event for later access
+ * @param domElement Element on wich the event will trigger
+ * @param content The content as array of bytes
+ */
+export function addDownloadAsFileListener(domElement: HTMLElement, content: Buffer) {
+    const { dialog } = require('electron').remote;
+
+    domElement.addEventListener('click', () => {
+        const path = dialog.showSaveDialog({ title: 'Select the saving path', defaultPath: 'C:/' });
+        if (!path) return;
+
+        writeFile(path, content, (err: NodeJS.ErrnoException) => {
+            if (err) {
+                dialog.showMessageBox({ message: err.message });
+            }
+        });
+    }, false);
 }

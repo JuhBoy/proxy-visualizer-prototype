@@ -1,4 +1,7 @@
 import { IExchangeContent } from "../Models/IExchangeContent";
+import { appendCss } from "../Utils/CssHelpers";
+import { createNormalButton } from "../Utils/DomHelper";
+import { addDownloadAsFileListener } from "../renderer";
 
 export class ExchangeContentGenerator {
 
@@ -66,6 +69,12 @@ export class ExchangeContentGenerator {
         for (const byte of bodyBytes)
             body += String.fromCharCode(byte);
 
+        const button = createNormalButton('Download', 'fas fa-save');
+        appendCss(button, { margin: '10px' });
+        addDownloadAsFileListener(button, Buffer.from(bodyBytes));
+
+        domElement.appendChild(button);
+        domElement.appendChild(document.createElement('br'));
         domElement.append(body);
     }
 
