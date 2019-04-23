@@ -78,11 +78,6 @@ export class FakeServer {
             'responseBody': [0x7b, 0x20, 0x22, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x22, 0x3a, 0x20, 0x22, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x22, 0x20, 0x7d]
         }
 
-        const rrr: any = {
-            header: "Listening started",
-            content: "The listening has started"
-        };
-
         const server = Http.createServer((req: any, res: any) => {
             res.writeHead(200, { 'Content-Type': 'application/json', 'Content-Encoding': 'UTF-8' });
             const { url } = req;
@@ -91,21 +86,19 @@ export class FakeServer {
 
             if (url.indexOf('start-listening') > -1) {
                 this.listen = true;
-                res.write(JSON.stringify(rrr));
+                res.write(JSON.stringify({ header: "Listening started", content: "The listening has started" }));
             } else if (url.indexOf('stop-listening') > -1) {
                 this.listen = false;
-                rrr.header = "Listening stopped";
-                rrr.content = "listening has stopped";
-                res.write(JSON.stringify(rrr));
+                res.write(JSON.stringify({ header: 'Listening stopped', content: 'listening has stopped' }));
             } else if (url.indexOf('new') > -1) {
                 this.listen = false;
-                res.write(JSON.stringify({ header: 'New tmp file launched', content: 'a new file ...' }));
+                res.write(JSON.stringify({ header: 'New tmp file', content: 'a new file ...' }));
             } else if (url.indexOf('open') > -1) {
                 this.listen = false;
-                res.write(JSON.stringify({ header: 'Open file', content: 'Open file damni it' }));
+                res.write(JSON.stringify({ header: 'Open file', content: 'Open file damn it' }));
             } else if (url.indexOf('get-current-exchange-list') > -1) {
                 this.listen = false;
-                res.write(JSON.stringify([ this.sampleBase, this.sampleBase, this.sampleBase, this.sampleBase, this.sampleBase ]));
+                res.write(JSON.stringify([this.sampleBase, this.sampleBase, this.sampleBase, this.sampleBase, this.sampleBase]));
             } else {
                 const index = url.indexOf('?uuid=');
                 responseObj.uuid = url.substring(index + 6, url.length);
@@ -141,7 +134,7 @@ export class FakeServer {
 
         setInterval(() => {
             if (!this.listen) return;
-            
+
             this.sockets.forEach((ws: any, index: number) => {
                 if (ws.readyState == 1) {
                     const reandomIndex = Math.floor(Math.random() * (cachedKeys.length - 1));

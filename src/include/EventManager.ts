@@ -57,7 +57,7 @@ export class MainEventManager extends EventManager {
         let clickExchangeListener = (event: any, args: any) => {
             const { uuid } = args;
             const query = { hostname: 'localhost', port: 8887, path: `/get-exchange-content?uuid=${uuid}` };
-    
+
             HttpClient.Request<IExchangeContent>(query, (status: number, content: IExchangeContent) => {
                 if (status != 200 || content == undefined) { return; }
                 this.window.webContents.send('exchange-content', content);
@@ -75,7 +75,7 @@ export class MainEventManager extends EventManager {
     private setMenuListener() {
         let menuItemListener = (_: any, action: string) => {
             const actionEnum: Action = MenuActionHandle.getActionFromString(action);
-            const menuHandle: MenuActionHandle   = new MenuActionHandle(actionEnum, ApplicationState.instance());
+            const menuHandle: MenuActionHandle = new MenuActionHandle(actionEnum, ApplicationState.instance());
             const cmdHandler: MenuCommandHandler = new MenuCommandHandler(this);
             menuHandle.Act(cmdHandler);
         };

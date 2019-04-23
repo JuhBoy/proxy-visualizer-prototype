@@ -17,9 +17,9 @@ type ReqCallback = (status: number, data: any, command: ICommand) => void;
 export class MenuActionHandle {
 
     private static START_CONFIG = { port: 8887, path: '/start-listening' };
-    private static STOP_CONFIG  = { port: 8887, path: '/stop-listening' };
-    private static NEW_CONFIG  = { port: 8887, path: '/new' };
-    private static OPEN_CONFIG  = { port: 8887, path: '/open' };
+    private static STOP_CONFIG = { port: 8887, path: '/stop-listening' };
+    private static NEW_CONFIG = { port: 8887, path: '/new' };
+    private static OPEN_CONFIG = { port: 8887, path: '/open' };
 
     private state: ApplicationState;
     private action: Action;
@@ -65,7 +65,7 @@ export class MenuActionHandle {
     private OpenAction(): void {
         if (this.state.isListening())
             this.StopAction();
-        
+
         this.makeRequest(MenuActionHandle.OPEN_CONFIG, (_: number, data: any, cmd: ICommand) => {
             const clearCmd: ICommand = { type: CommandType.Action, action: { target: Targets.exchangeList, perform: Performs.clear } };
             const clearContentCmd: ICommand = { type: CommandType.Action, action: { target: Targets.exchangeContent, perform: Performs.clear } };

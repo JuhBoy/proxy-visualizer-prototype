@@ -18,7 +18,7 @@ export class MenuCommandHandler {
             throw new Error("eventManager cannot be null");
         this.eventManager = eventManager;
     }
-    
+
     /**
      * Can be called multiple times by the @class MenuActionHandle
      * @param command A command from @class MenuActionHandle

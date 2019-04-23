@@ -4,13 +4,13 @@ import { ExchangeGenerator } from "./ExchangeGenerator";
 import { ExchangeContentGenerator } from "./ExchangeContentGenerator";
 
 export class UICommandManager {
-    
+
     private command: ICommand;
 
     constructor(command: ICommand) {
         this.command = command;
     }
-    
+
     public play() {
         switch (this.command.type) {
             case CommandType.Action:
@@ -32,8 +32,8 @@ export class UICommandManager {
     }
 
     playMessage() {
-        const domMessage = new MessageGenerator();
-        domMessage.show(200);
+        const domMessage = new MessageGenerator(this.command);
+        domMessage.show(3000);
     }
 
     playAlert() {
