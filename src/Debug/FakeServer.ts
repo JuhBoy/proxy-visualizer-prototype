@@ -24,6 +24,13 @@ export class FakeServer {
     public startHttpServer() {
         const responseObj: any = {
             'uuid': '',
+            'timings': [
+                { name: 'Queueing', msTime: 2050 },
+                { name: 'DNS/SSL resolution', msTime: 60 },
+                { name: 'Proxy Negotiation', msTime: 15 },
+                { name: 'TTFB (Time to first byte)', msTime: 225 },
+                { name: 'Content Download', msTime: 1000 },
+            ],
             'requestHeaders': [
                 'access-control-allow-origin: *',
                 'cache-control: max-age=0, private, must-revalidate',
@@ -153,7 +160,6 @@ export class FakeServer {
             });
             i++;
         }, 1_000);
-
     }
 
     public stopServer() {

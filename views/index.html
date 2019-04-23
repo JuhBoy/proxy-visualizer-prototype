@@ -202,21 +202,20 @@
               <th>Time</th>
             </tr>
           </thead>
-
           <tbody id="exchange-list-body">
           </tbody>
         </table>
       </div>
 
       <div id="right-panel" class="col s5">
-        <div class="card white-text">
+        <div class="card">
           <div class="padding-10 card-content deep-purple darken-2">
-            <p class="card-stats-title">Selection <span id="selection" class="bold"></span></p>
+            <p class="card-stats-title white-text">
+              <span class="bold">Timings</span> <span id="selection" class="bold"></span>
+            </p>
           </div>
           <div class="card-action">
-            <button class="waves-effect waves-light btn-small red darken-3"><i class="fas fa-file-csv"></i> CSV</button>
-            <button class="waves-effect waves-light btn-small red darken-3"><i class="fab fa-js"></i> JSON</button>
-            <button class="waves-effect waves-light btn-small red darken-3"><i class="fas fa-file-code"></i> XML</button>
+            <ul id="exchange-timings" class="collection scroll4"  style="max-height: 100px; overflow-y: scroll"></ul>
           </div>
         </div>
 

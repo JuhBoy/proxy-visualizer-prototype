@@ -25,10 +25,10 @@ export class Application {
 
         return new BrowserWindow({
             title: this.myName,
-            height: 900,
+            height: 920,
             width: 1600,
             minWidth: 1000,
-            minHeight: 800,
+            minHeight: 920,
             frame: false,
             show: false,
             backgroundColor: "#fafafa"

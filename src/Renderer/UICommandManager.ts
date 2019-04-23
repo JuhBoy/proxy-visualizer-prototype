@@ -2,6 +2,7 @@ import { ICommand, CommandType, Targets, Performs } from "../Models/ICommand";
 import { MessageGenerator } from "./MessageGenerator";
 import { ExchangeGenerator } from "./ExchangeGenerator";
 import { ExchangeContentGenerator } from "./ExchangeContentGenerator";
+import { ExchangeTimingGenerator } from "./ExchangeTimingGenerator";
 
 export class UICommandManager {
 
@@ -51,6 +52,7 @@ export class UICommandManager {
             case Targets.exchangeContent:
                 if (action.perform == Performs.clear) {
                     ExchangeContentGenerator.clearCache();
+                    ExchangeTimingGenerator.clearCache();
                 }
                 break;
             default:

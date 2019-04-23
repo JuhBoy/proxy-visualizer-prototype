@@ -5,6 +5,7 @@ import { IEventMessage } from "./Models/IEventMessage";
 import { IHttpExchange } from "./Models/IHttpExchange";
 import { UICommandManager } from "./Renderer/UICommandManager";
 import { writeFile } from "fs";
+import { ExchangeTimingGenerator } from "./Renderer/ExchangeTimingGenerator";
 
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
@@ -41,6 +42,9 @@ export function Init() {
             if (exchangeContent == undefined) return;
             const generator = new ExchangeContentGenerator(exchangeContent);
             generator.flush();
+
+            const timingGenerator = new ExchangeTimingGenerator(exchangeContent.timings);
+            timingGenerator.flush();
         });
 
         /**
