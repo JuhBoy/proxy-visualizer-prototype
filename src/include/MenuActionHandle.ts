@@ -16,12 +16,12 @@ type ReqCallback = (status: number, data: any, command: ICommand) => void;
 
 export class MenuActionHandle {
 
-    private static START_CONFIG = { port: 8887, path: '/start-listening' };
-    private static STOP_CONFIG = { port: 8887, path: '/stop-listening' };
-    private static NEW_CONFIG = { port: 8887, path: '/new' };
-    private static OPEN_CONFIG = { port: 8887, path: '/open' };
-    private static SAVE_CONFIG = { port: 8887, path: '/save' };
-    private static SAVE_AS_CONFIG = { port: 8887, path: '/save-as' };
+    private static START_CONFIG = { port: process.env.PORT, path: '/start-listening' };
+    private static STOP_CONFIG = { port: process.env.PORT, path: '/stop-listening' };
+    private static NEW_CONFIG = { port: process.env.PORT, path: '/new' };
+    private static OPEN_CONFIG = { port: process.env.PORT, path: '/open' };
+    private static SAVE_CONFIG = { port: process.env.PORT, path: '/save' };
+    private static SAVE_AS_CONFIG = { port: process.env.PORT, path: '/save-as' };
 
     private state: ApplicationState;
     private action: Action;

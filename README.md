@@ -21,6 +21,18 @@ npm run start
 
 Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
 
+Environment variables must be defined, here is the base set:
+```bash
+#Define the server port
+PORT=8887
+#Define the server host
+HOST=localhost
+#Define the application Name
+NAME="Proxy Visualizer"
+#Define the Envirnment (Devlopment|Production|Test)
+ENV=Development
+```
+
 ## Re-compile automatically
 
 To recompile automatically and to allow using [electron-reload](https://github.com/yan-foto/electron-reload), run this in a separate terminal:

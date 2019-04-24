@@ -1,7 +1,9 @@
+require('dotenv').config();
 import { app } from "electron";
 import { Application } from "./Application";
 
-const application: Application = new Application("2be-profiler");
+const application: Application = new Application(process.env.NAME);
+
 app.on("ready", () => {
     application.startApplication();
     application.openDevTools();

@@ -56,7 +56,7 @@ export class MainEventManager extends EventManager {
     private setClickExchangeListener() {
         let clickExchangeListener = (event: any, args: any) => {
             const { uuid } = args;
-            const query = { hostname: 'localhost', port: 8887, path: `/get-exchange-content?uuid=${uuid}` };
+            const query = { hostname: process.env.HOST, port: process.env.PORT, path: `/get-exchange-content?uuid=${uuid}` };
 
             HttpClient.Request<IExchangeContent>(query, (status: number, content: IExchangeContent) => {
                 if (status != 200 || content == undefined) { return; }

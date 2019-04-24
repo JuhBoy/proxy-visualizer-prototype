@@ -21,7 +21,9 @@ export class Application {
     }
 
     public createWindow(): BrowserWindow {
-        new FakeServer(true, (type: string, ws: any) => {/*console.log(type, ws);*/ });
+        if (process.env.ENV == "Development") {
+            new FakeServer(true, (type: string, ws: any) => {/* SILENCE! */ });
+        }
 
         return new BrowserWindow({
             title: this.myName,
