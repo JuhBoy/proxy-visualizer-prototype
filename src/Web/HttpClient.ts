@@ -2,7 +2,7 @@ import { net, ClientRequest } from 'electron';
 
 export class HttpClient {
 
-    public static Request<T>(options: object, handle: (s: number, d: T) => void) {
+    public static Request<T>(options: any, handle: (s: number, d: T) => void) {
         const requestOptions: object = {
             method: 'GET',
             protocol: 'http:',
@@ -28,7 +28,9 @@ export class HttpClient {
             });
         });
 
-        request.end();
+        if (options.body)
+            request.end(Buffer.from(JSON.stringify(options.body)));
+        else
+            request.end();
     }
-
 }

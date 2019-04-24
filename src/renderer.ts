@@ -1,11 +1,12 @@
 import { IExchangeContent } from "./Models/IExchangeContent";
 import { ExchangeContentGenerator, ExchangeGenerator } from "./renderer-generator";
-import { ipcRenderer, BrowserWindow } from 'electron';
+import { ipcRenderer } from 'electron';
 import { IEventMessage } from "./Models/IEventMessage";
 import { IHttpExchange } from "./Models/IHttpExchange";
 import { UICommandManager } from "./Renderer/UICommandManager";
 import { writeFile } from "fs";
 import { ExchangeTimingGenerator } from "./Renderer/ExchangeTimingGenerator";
+import { menuActionConfirm, updateState, getState } from "./Utils/MenuHelpers";
 
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
@@ -51,6 +52,7 @@ export function Init() {
          * COMMUNICATION IPC MAIN HANDLER
          */
         ipcRenderer.on('serve-ipc-message', (_: any, message: IEventMessage) => {
+            updateState(message.state);
             const manager = new UICommandManager(message.command);
             manager.play();
         });
@@ -93,7 +95,10 @@ export function Init() {
     const onMenuItemClick = (ev: any) => {
         const domElement = ev.currentTarget;
         const type = domElement.getAttribute('data-type');
-        ipcRenderer.send(`menu-action`, type);
+        const ok: boolean = menuActionConfirm(type, getState());
+        if (ok) {
+            ipcRenderer.send(`menu-action`, type);
+        }
     }
     document.querySelectorAll('#menu-button-container div').forEach((menuItem: HTMLDivElement) => {
         menuItem.addEventListener('click', (ev: any) => { onMenuItemClick(ev); });

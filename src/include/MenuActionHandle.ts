@@ -20,6 +20,8 @@ export class MenuActionHandle {
     private static STOP_CONFIG = { port: 8887, path: '/stop-listening' };
     private static NEW_CONFIG = { port: 8887, path: '/new' };
     private static OPEN_CONFIG = { port: 8887, path: '/open' };
+    private static SAVE_CONFIG = { port: 8887, path: '/save' };
+    private static SAVE_AS_CONFIG = { port: 8887, path: '/save-as' };
 
     private state: ApplicationState;
     private action: Action;
@@ -58,7 +60,8 @@ export class MenuActionHandle {
             }
             this.callback(listCmd);
 
-            this.state.setFile(data.file);
+            this.state.setFile(null);
+            this.state.setChanged(false);
         });
     }
 
@@ -76,13 +79,24 @@ export class MenuActionHandle {
             this.callback(loadFromFile);
 
             this.state.setChanged(false);
+            this.state.setFile(data.file);
         });
     }
 
     private SaveAction(): void {
+        this.makeRequest(MenuActionHandle.SAVE_CONFIG, (status: number, data: any, cmd: ICommand) => {
+            if (status != 200) return;
+            this.state.setChanged(data.state.changed);
+            this.state.setFile(data.state.file);
+        });
     }
 
     private SaveAsAction(): void {
+        this.makeRequest(MenuActionHandle.SAVE_AS_CONFIG, (status: number, data: any, cmd: ICommand) => {
+            if (status != 200) return;
+            this.state.setChanged(data.state.changed);
+            this.state.setFile(data.state.file);
+        });
     }
 
     private StartAction(): void {

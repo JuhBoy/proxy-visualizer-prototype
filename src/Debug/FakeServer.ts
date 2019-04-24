@@ -102,10 +102,12 @@ export class FakeServer {
                 res.write(JSON.stringify({ header: 'New tmp file', content: 'a new file ...' }));
             } else if (url.indexOf('open') > -1) {
                 this.listen = false;
-                res.write(JSON.stringify({ header: 'Open file', content: 'Open file damn it' }));
+                res.write(JSON.stringify({ header: 'Open file', content: 'Open file damn it', file: "exchange2353azr.zap" }));
             } else if (url.indexOf('get-current-exchange-list') > -1) {
                 this.listen = false;
                 res.write(JSON.stringify([this.sampleBase, this.sampleBase, this.sampleBase, this.sampleBase, this.sampleBase]));
+            } else if (url.indexOf('save') > -1) {
+                res.write(JSON.stringify({ header: 'File Saved !', content: 'new file has been saved at /root/fileSaved.txt', state: { changed: false, file: "fileSaved.txt" } }));
             } else {
                 const index = url.indexOf('?uuid=');
                 responseObj.uuid = url.substring(index + 6, url.length);
