@@ -1,6 +1,6 @@
 import { IExchangeContent } from "../Models/IExchangeContent";
 import { appendCss } from "../Utils/CssHelpers";
-import { createNormalButton } from "../Utils/DomHelper";
+import { createNormalButton, xWwwFormUrlEncodedDomSerializer } from "../Utils/DomHelper";
 import { addDownloadAsFileListener } from "../renderer";
 
 export class ExchangeContentGenerator {
@@ -58,13 +58,19 @@ export class ExchangeContentGenerator {
      */
 
     private static appendBodyContent(dataIdentifier: string, domElement: Element) {
+        const _static = ExchangeContentGenerator;
         let body: string = "";
         let bodyBytes: number[];
+        let headers: string[];
 
-        if (dataIdentifier.indexOf('response') > -1)
-            bodyBytes = ExchangeContentGenerator.currentExchange.responseBody;
-        else
-            bodyBytes = ExchangeContentGenerator.currentExchange.requestBody;
+        if (dataIdentifier.indexOf('response') > -1) {
+            headers = _static.currentExchange.responseHeaders;
+            bodyBytes = _static.currentExchange.responseBody;
+        }
+        else {
+            headers = _static.currentExchange.requestHeaders;
+            bodyBytes = _static.currentExchange.requestBody;
+        }
 
         for (const byte of bodyBytes)
             body += String.fromCharCode(byte);
@@ -75,7 +81,16 @@ export class ExchangeContentGenerator {
 
         domElement.appendChild(button);
         domElement.appendChild(document.createElement('br'));
-        domElement.append(body);
+
+        if (_static.isXFormUrlEncodedContentType(headers)) {
+            const elements = xWwwFormUrlEncodedDomSerializer(body, 'li');
+            elements.forEach((el) => {
+                el.setAttribute('class', 'collection-item');
+                domElement.appendChild(el);
+            });
+        } else {
+            domElement.append(body);
+        }
     }
 
     private static appendHeaders(dataIdentifier: string, formatted: boolean, domElement: Element) {
@@ -128,6 +143,10 @@ export class ExchangeContentGenerator {
     /**
      *  UTILS =====================================================================================
      */
+
+    private static isXFormUrlEncodedContentType(headers: string[]): boolean {
+        return headers.indexOf('Content-Type: application/x-www-form-urlencoded') > -1;
+    }
 
     private static appendFormattedRows(rows: HTMLLIElement[], domElement: Element) {
         for (const row of rows)

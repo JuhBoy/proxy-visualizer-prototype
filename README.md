@@ -1,4 +1,4 @@
-# Proxy client
+# Echoes UI
 
 - `main.ts` - Starts the app and creates an Application class. This is the app's **main process**.
 

@@ -28,3 +28,36 @@ export function createAwesomIcon(type: string, text: string): HTMLElement {
     iDomElement.innerText = text;
     return iDomElement;
 }
+
+/**
+ * Create DOM elements from body of type application/x-www-form-urlencoded
+ * @param content Decoded content as string from HTTP body
+ * @param htmlType the HTML tag to use as parents of each keys
+ */
+//TODO: Change this to class if more parser are required in the futur
+export function xWwwFormUrlEncodedDomSerializer(content: string, htmlType: string): HTMLElement[] {
+    const elements: HTMLElement[] = [];
+    const kvSeparator = '=';
+    const blockSeparator = '&';
+
+    let blocks = content.split(blockSeparator);
+    blocks.forEach((block: string) => {
+        const keyValue = block.split(kvSeparator);
+
+        const domElement = document.createElement(htmlType);
+        const leftElement = document.createElement('span');
+        const rightElement = document.createElement('span');
+
+        leftElement.setAttribute('class', 'bold');
+        rightElement.setAttribute('class', 'italic');
+
+        domElement.appendChild(leftElement);
+        domElement.appendChild(rightElement);
+
+        leftElement.innerText = `${keyValue[0]}: `;
+        rightElement.innerText = keyValue[1];
+
+        elements.push(domElement);
+    });
+    return elements;
+}
