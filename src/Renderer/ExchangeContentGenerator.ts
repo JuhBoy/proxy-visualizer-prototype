@@ -69,8 +69,8 @@ export class ExchangeContentGenerator {
         for (const byte of bodyBytes)
             body += String.fromCharCode(byte);
 
-        const button = createNormalButton('Download', 'fas fa-save');
-        appendCss(button, { margin: '10px' });
+        const button = createNormalButton('', 'fas fa-save');
+        appendCss(button, { marginBottom: '5px' });
         addDownloadAsFileListener(button, Buffer.from(bodyBytes));
 
         domElement.appendChild(button);

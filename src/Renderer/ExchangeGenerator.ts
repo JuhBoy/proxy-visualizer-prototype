@@ -18,11 +18,11 @@ export class ExchangeGenerator {
 
         this.addUUIDNodeAttribute(child);
 
-        const protocol = this.buildGenericNode(this.model.protocol);
+        const protocol = this.buildGenericNode(this.model.method);
         const status = this.buildStatusDom();
         const host = this.buildGenericNode(this.model.host);
         const path = this.buildGenericNode(this.model.path);
-        const time = this.buildTimeDom();
+        const time = this.buildSizeNode();
 
         child.appendChild(protocol);
         child.appendChild(status);
@@ -40,9 +40,9 @@ export class ExchangeGenerator {
         domElement.innerHTML = null;
     }
 
-    private buildTimeDom() {
-        const domElement = this.buildGenericNode(this.model.time.toString());
-        domElement.innerText += " ms";
+    private buildSizeNode() {
+        const domElement = this.buildGenericNode(this.model.size.toString());
+        domElement.innerText += " Mo";
         return domElement;
     }
 

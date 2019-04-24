@@ -13,7 +13,7 @@ export function createNormalButton(text: string, icon?: string): HTMLButtonEleme
     }
 
     button.append(` ${text}`);
-    button.setAttribute('class', 'btn-small waves-effect waves-light');
+    button.setAttribute('class', 'btn-small blue darken-3');
 
     return button;
 }

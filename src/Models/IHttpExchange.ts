@@ -1,8 +1,8 @@
 export interface IHttpExchange {
     uuid: string;
-    protocol: string;
+    method: string;
     status: number;
     host: string;
     path: string;
-    time: number;
+    size: number;
 }
