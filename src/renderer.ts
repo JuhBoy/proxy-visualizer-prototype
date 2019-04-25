@@ -6,7 +6,8 @@ import { IHttpExchange } from "./Models/IHttpExchange";
 import { UICommandManager } from "./Renderer/UICommandManager";
 import { writeFile } from "fs";
 import { ExchangeTimingGenerator } from "./Renderer/ExchangeTimingGenerator";
-import { menuActionConfirm, updateState, getState } from "./Utils/MenuHelpers";
+import { menuActionConfirm, updateState, getState, getDataForMenuAction } from "./Utils/MenuHelpers";
+import { MenuAction } from "./Models/ICommand";
 
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
@@ -93,11 +94,12 @@ export function Init() {
      * @param ev MouseEvent from listener
      */
     const onMenuItemClick = (ev: any) => {
-        const domElement = ev.currentTarget;
-        const type = domElement.getAttribute('data-type');
-        const ok: boolean = menuActionConfirm(type, getState());
+        const name = ev.currentTarget.getAttribute('data-type');
+        const data = getDataForMenuAction(name);
+        const ok   = menuActionConfirm(name, data, getState());
+
         if (ok) {
-            ipcRenderer.send(`menu-action`, type);
+            ipcRenderer.send('menu-action', { name: name, data: data } as MenuAction);
         }
     }
     document.querySelectorAll('#menu-button-container div').forEach((menuItem: HTMLDivElement) => {

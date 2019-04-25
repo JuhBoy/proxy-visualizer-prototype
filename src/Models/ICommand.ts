@@ -22,6 +22,11 @@ export interface Action {
     perform: string;
 }
 
+export interface MenuAction {
+    name: string;
+    data?: any;
+}
+
 export interface ICommand {
     type: CommandType;
     header?: string;

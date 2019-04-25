@@ -65,11 +65,16 @@ export class MenuActionHandle {
         });
     }
 
-    private OpenAction(): void {
+    private OpenAction(data: any): void {
         if (this.state.isListening())
             this.StopAction();
 
-        this.makeRequest(MenuActionHandle.OPEN_CONFIG, (_: number, data: any, cmd: ICommand) => {
+        const request = {
+            ...MenuActionHandle.OPEN_CONFIG,
+            path: `${MenuActionHandle.OPEN_CONFIG.path}/${data.fileName}`
+        }
+
+        this.makeRequest(request, (_: number, data: any, cmd: ICommand) => {
             const clearCmd: ICommand = { type: CommandType.Action, action: { target: Targets.exchangeList, perform: Performs.clear } };
             const clearContentCmd: ICommand = { type: CommandType.Action, action: { target: Targets.exchangeContent, perform: Performs.clear } };
             const loadFromFile: ICommand = { type: CommandType.Action, action: { target: Targets.exchangeList, perform: Performs.loadFile } };
@@ -132,14 +137,15 @@ export class MenuActionHandle {
      * Actions can be performed in chain, meaning the callback (MenuCommandHandler.Proccess) can
      * be called multiple time in order to send back different commands.
      * @param callback A callback that can be called multiple times.
+     * @param data A action's specific data object. It Depends of the method.
      */
-    public Act(handler: MenuCommandHandler): void {
+    public Act(handler: MenuCommandHandler, data?: any): void {
         this.callback = (cmd: ICommand) => { handler.Process(cmd); };
 
         // Reproduce only if you know exactly what you're doing
         const method: string = this.action.toString();
         const that: any = this;
-        that[method]();
+        that[method](data);
     }
 
     private makeRequest(config: any, onResponse: ReqCallback): void {

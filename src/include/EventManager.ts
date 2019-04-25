@@ -7,6 +7,7 @@ import { MenuActionHandle, Action } from './MenuActionHandle';
 import { ApplicationState } from '../ApplicationState';
 import { IEventMessage } from '../Models/IEventMessage';
 import { MenuCommandHandler } from './Commands';
+import { MenuAction } from '../Models/ICommand';
 
 export class EventManager {
 
@@ -73,11 +74,11 @@ export class MainEventManager extends EventManager {
      * command to the renderer process
      */
     private setMenuListener() {
-        let menuItemListener = (_: any, action: string) => {
-            const actionEnum: Action = MenuActionHandle.getActionFromString(action);
+        let menuItemListener = (_: any, menuAction: MenuAction) => {
+            const actionEnum: Action = MenuActionHandle.getActionFromString(menuAction.name);
             const menuHandle: MenuActionHandle = new MenuActionHandle(actionEnum, ApplicationState.instance());
             const cmdHandler: MenuCommandHandler = new MenuCommandHandler(this);
-            menuHandle.Act(cmdHandler);
+            menuHandle.Act(cmdHandler, menuAction.data);
         };
         ipcMain.on('menu-action', menuItemListener);
         this.handles['menu-action'] = menuItemListener;
