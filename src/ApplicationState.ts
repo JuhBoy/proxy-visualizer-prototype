@@ -1,46 +1,75 @@
+import { ipcMain } from "electron";
+import { GlobalRequireStateChannel } from "./Utils/IPCChannels";
 
 export class ApplicationState {
 
     private static _instance: ApplicationState = new ApplicationState();
 
-    private _isAlive: boolean;
-    private _isListening: boolean;
-    private _file: string | null;
-    private _changed: boolean;
+    private alive: boolean;
+    private listening: boolean;
+    private file: string | null;
+    private changed: boolean;
+    private settings: any = { exclusionList: [], port: null, interface: "-1", registered: true };
+
+    constructor() {
+        ipcMain.on(GlobalRequireStateChannel, (_: any, data: any) => {
+            _.returnValue = ApplicationState.instance();
+        });
+    }
 
     public static instance(): ApplicationState {
         return ApplicationState._instance;
     }
 
     public isAlive(): boolean {
-        return this._isAlive;
+        return this.alive;
     }
 
     public setAlive(alive: boolean): void {
-        this._isAlive = alive;
+        this.alive = alive;
     }
 
     public setListening(listen: boolean): void {
-        this._isListening = listen;
+        this.listening = listen;
     }
 
     public isListening(): boolean {
-        return this._isListening;
+        return this.listening;
     }
 
     public getFile(): string {
-        return this._file;
+        return this.file;
     }
 
     public setFile(file: string): void {
-        this._file = file;
+        this.file = file;
     }
 
     public hasChanged(): boolean {
-        return this._changed;
+        return this.changed;
     }
 
     public setChanged(changed: boolean): void {
-        this._changed = changed;
+        this.changed = changed;
+    }
+
+    public getSettings() {
+        return this.settings;
+    }
+
+    public setProperties(data: any) {
+        const that: any = this;
+        for (const key in data) {
+            if (!this.hasOwnProperty(key)) { continue; }
+            that[key] = data[key];
+        }
+    }
+
+    public setSettings(settings: any): void {
+        if (!settings) return;
+        this.settings = {
+            ...this.settings,
+            ...settings
+        };
     }
 }

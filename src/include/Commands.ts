@@ -4,6 +4,7 @@ import { IEventMessage } from "../Models/IEventMessage";
 import { ApplicationState } from "../ApplicationState";
 import { HttpClient } from "../Web/HttpClient";
 import { MainEventManager } from "./EventManager";
+import { Application } from "../Application";
 
 export class MenuCommandHandler {
 
@@ -29,11 +30,25 @@ export class MenuCommandHandler {
             return;
         }
 
+        if (this.isOpenWindowCommand(command)) {
+            this.openWindow(command);
+            return;
+        }
+
         const message: IEventMessage = {
             state: ApplicationState.instance(),
             command: command
         };
         this.eventManager.serveMessage(message);
+    }
+
+    private isOpenWindowCommand(command: ICommand): boolean {
+        return (command.type == CommandType.Action && command.action.perform == Performs.openWindow);
+    }
+
+    private openWindow(command: ICommand) {
+        const eventManager = Application.getEventManagerByTag(command.action.target);
+        eventManager.showWindow();
     }
 
     private ProcessLoadFileCmd(command: ICommand) {

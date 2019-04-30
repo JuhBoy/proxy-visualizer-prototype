@@ -8,6 +8,7 @@ import { writeFile } from "fs";
 import { ExchangeTimingGenerator } from "./Renderer/ExchangeTimingGenerator";
 import { menuActionConfirm, updateState, getState, getDataForMenuAction } from "./Utils/MenuHelpers";
 import { MenuAction } from "./Models/ICommand";
+import { NewHttpExchangePushChannel, BatchHttpExchangePushChannel, UpdateExchangeContentChannel, GlobalIpcMessage, ExchangeClickChannel } from "./Utils/IPCChannels";
 
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
@@ -22,7 +23,7 @@ export function Init() {
         /**
          * EXCHANGE HTTP PUSH ROW
          */
-        ipcRenderer.on("http-exchange-push", (event: any, exchange: IHttpExchange) => {
+        ipcRenderer.on(NewHttpExchangePushChannel, (event: any, exchange: IHttpExchange) => {
             const addedRow = new ExchangeGenerator(exchange).flush();
             addExchangeListener(addedRow);
         });
@@ -30,7 +31,7 @@ export function Init() {
         /**
          * EXCHANGE HTTP PUSH ROWS
          */
-        ipcRenderer.on('http-exchange-batch-push', (_: any, exchanges: IHttpExchange[]) => {
+        ipcRenderer.on(BatchHttpExchangePushChannel, (_: any, exchanges: IHttpExchange[]) => {
             for (const exchange of exchanges) {
                 const addedRow = new ExchangeGenerator(exchange).flush();
                 addExchangeListener(addedRow);
@@ -40,22 +41,13 @@ export function Init() {
         /**
          * EXCHANGE CONTENT
          */
-        ipcRenderer.on("exchange-content", (_: any, exchangeContent: IExchangeContent) => {
+        ipcRenderer.on(UpdateExchangeContentChannel, (_: any, exchangeContent: IExchangeContent) => {
             if (exchangeContent == undefined) return;
             const generator = new ExchangeContentGenerator(exchangeContent);
             generator.flush();
 
             const timingGenerator = new ExchangeTimingGenerator(exchangeContent.timings);
             timingGenerator.flush();
-        });
-
-        /**
-         * COMMUNICATION IPC MAIN HANDLER
-         */
-        ipcRenderer.on('serve-ipc-message', (_: any, message: IEventMessage) => {
-            updateState(message.state);
-            const manager = new UICommandManager(message.command);
-            manager.play();
         });
     }
 
@@ -69,7 +61,7 @@ export function Init() {
 
             const domTarget = event.currentTarget;
             const uuid = domTarget.getAttribute('data-uuid');
-            ipcRenderer.send("http-exchange-click", { uuid: uuid });
+            ipcRenderer.send(ExchangeClickChannel, { uuid: uuid });
         }, false);
     }
 
@@ -96,7 +88,7 @@ export function Init() {
     const onMenuItemClick = (ev: any) => {
         const name = ev.currentTarget.getAttribute('data-type');
         const data = getDataForMenuAction(name);
-        const ok   = menuActionConfirm(name, data, getState());
+        const ok = menuActionConfirm(name, data, getState());
 
         if (ok) {
             ipcRenderer.send('menu-action', { name: name, data: data } as MenuAction);

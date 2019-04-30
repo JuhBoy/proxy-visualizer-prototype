@@ -1,13 +1,16 @@
 
 export const Targets: any = {
     exchangeList: 'exchange-list',
-    exchangeContent: 'exchange-content'
+    exchangeContent: 'exchange-content',
+    mainWindow: 'main-window',
+    settingWindow: 'settingWindow'
 }
 
 export const Performs: any = {
     clear: 'clear',
     loadFile: 'load-file',
-    push: 'push'
+    push: 'push',
+    openWindow: 'open-window'
 }
 
 export enum CommandType {

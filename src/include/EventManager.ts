@@ -8,6 +8,14 @@ import { ApplicationState } from '../ApplicationState';
 import { IEventMessage } from '../Models/IEventMessage';
 import { MenuCommandHandler } from './Commands';
 import { MenuAction } from '../Models/ICommand';
+import {
+    ExchangeClickChannel,
+    MenuActionChannel,
+    GlobalIpcMessage,
+    NewHttpExchangePushChannel,
+    BatchHttpExchangePushChannel,
+    UpdateExchangeContentChannel
+} from '../Utils/IPCChannels';
 
 export class EventManager {
 
@@ -27,6 +35,10 @@ export class EventManager {
     public stopListening(): EventManager {
         this.handles = null;
         return this;
+    }
+
+    public showWindow(): void {
+        this.window.show();
     }
 }
 
@@ -61,11 +73,11 @@ export class MainEventManager extends EventManager {
 
             HttpClient.Request<IExchangeContent>(query, (status: number, content: IExchangeContent) => {
                 if (status != 200 || content == undefined) { return; }
-                this.window.webContents.send('exchange-content', content);
+                this.window.webContents.send(UpdateExchangeContentChannel, content);
             });
         };
-        ipcMain.on("http-exchange-click", clickExchangeListener);
-        this.handles["http-exchange-click"] = clickExchangeListener;
+        ipcMain.on(ExchangeClickChannel, clickExchangeListener);
+        this.handles[ExchangeClickChannel] = clickExchangeListener;
     }
 
     /**
@@ -80,8 +92,8 @@ export class MainEventManager extends EventManager {
             const cmdHandler: MenuCommandHandler = new MenuCommandHandler(this);
             menuHandle.Act(cmdHandler, menuAction.data);
         };
-        ipcMain.on('menu-action', menuItemListener);
-        this.handles['menu-action'] = menuItemListener;
+        ipcMain.on(MenuActionChannel, menuItemListener);
+        this.handles[MenuActionChannel] = menuItemListener;
     }
 
     //===========================
@@ -89,14 +101,14 @@ export class MainEventManager extends EventManager {
     //===========================
 
     public serveMessage(message: IEventMessage) {
-        this.window.webContents.send('serve-ipc-message', message);
+        this.window.webContents.send(GlobalIpcMessage, message);
     }
 
     public pushExchangeData(data: IHttpExchange): void {
-        this.window.webContents.send("http-exchange-push", data);
+        this.window.webContents.send(NewHttpExchangePushChannel, data);
     }
 
     public pushExchangeBatch(data: IHttpExchange[]): void {
-        this.window.webContents.send("http-exchange-batch-push", data);
+        this.window.webContents.send(BatchHttpExchangePushChannel, data);
     }
 }

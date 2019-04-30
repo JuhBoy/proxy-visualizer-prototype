@@ -26,6 +26,14 @@ export const errorMessageCss: any = {
     background: '#e53935'
 }
 
+export const chipContainerCss: any = {
+    border: '1px solid gray',
+    height: '150px',
+    padding: '2px',
+    margin: '5px',
+    overflowY: 'scroll'
+}
+
 export function appendCss(element: HTMLElement, properties: any) {
     for (const key in properties) {
         if (!properties.hasOwnProperty(key)) continue;

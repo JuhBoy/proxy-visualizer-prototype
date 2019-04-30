@@ -6,8 +6,8 @@ export class HttpClient {
         const requestOptions: object = {
             method: 'GET',
             protocol: 'http:',
-            hostname: 'localhost',
-            port: 80,
+            hostname: process.env.HOST,
+            port: process.env.PORT,
             path: '/',
             ...options
         }

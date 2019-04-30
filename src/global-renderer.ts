@@ -1,6 +1,20 @@
+import { ipcRenderer } from "electron";
+import { GlobalIpcMessage } from "./Utils/IPCChannels";
+import { updateState } from "./Utils/MenuHelpers";
+import { UICommandManager } from "./renderer-generator";
+import { IEventMessage } from "./Models/IEventMessage";
 
-export function Init() {
+export function Init(options: any) {
     const { remote } = require("electron");
+
+    /**
+     * COMMUNICATION IPC MAIN HANDLER
+     */
+    ipcRenderer.on(GlobalIpcMessage, (_: any, message: IEventMessage) => {
+        updateState(message.state);
+        const manager = new UICommandManager(message.command);
+        manager.play();
+    });
 
     /**
      * Resize the main wrapper for better visibility
@@ -38,7 +52,23 @@ export function Init() {
      * Close the current Window
      */
     const closeWindowHandle = () => {
-        remote.getCurrentWindow().close();
+        if (options.hideNotClose)
+            remote.getCurrentWindow().hide();
+        else
+            remote.getCurrentWindow().close();
     }
     document.querySelector('#close-window-btn').addEventListener('click', closeWindowHandle);
+
+    /**
+     * Detect CTRL+R and stop it
+     */
+    const killReloadPage = () => {
+        document.addEventListener('keydown', (ev: any) => {
+            if (ev.keyCode == 82 && ev.ctrlKey) {
+                ev.preventDefault();
+                return false;
+            }
+        });
+    }
+    killReloadPage();
 }

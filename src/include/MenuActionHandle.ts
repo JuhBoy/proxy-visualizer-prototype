@@ -2,6 +2,7 @@ import { ApplicationState } from "../ApplicationState";
 import { ICommand, CommandType, Targets, Performs } from "../Models/ICommand";
 import { HttpClient } from "../Web/HttpClient";
 import { MenuCommandHandler } from "./Commands";
+import { Application } from "../Application";
 
 export enum Action {
     New = "NewAction",
@@ -9,7 +10,8 @@ export enum Action {
     Save = "SaveAction",
     SaveAs = "SaveAsAction",
     Start = "StartAction",
-    Stop = "StopAction"
+    Stop = "StopAction",
+    Setting = "SettingAction"
 }
 
 type ReqCallback = (status: number, data: any, command: ICommand) => void;
@@ -128,6 +130,16 @@ export class MenuActionHandle {
         });
     }
 
+    private SettingAction(): void {
+        this.callback({
+            type: CommandType.Action,
+            action: {
+                target: Targets.settingWindow,
+                perform: Performs.openWindow
+            }
+        });
+    }
+
     private createVoidCommand(): ICommand {
         return { type: CommandType.Void };
     }
@@ -178,6 +190,8 @@ export class MenuActionHandle {
                 return Action.Start;
             case "stop":
                 return Action.Stop;
+            case "setting":
+                return Action.Setting;
             default:
                 return undefined;
         }

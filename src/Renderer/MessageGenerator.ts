@@ -21,7 +21,7 @@ export class MessageGenerator {
      * Call show() to make it appears
      */
     constructor(command: ICommand) {
-        this.command    = command;
+        this.command = command;
         this.domElement = document.querySelector(MessageGenerator.ID);
         appendCss(this.domElement, { ...validMessageCss, display: 'none', opacity: '0' });
         MessageGenerator.clearTimeOut();
@@ -40,7 +40,7 @@ export class MessageGenerator {
         MessageGenerator.timeoutId = setTimeout(() => {
             this.domElement.style.opacity = '0';
             MessageGenerator.innerTimeoutId = setTimeout(() => this.domElement.style.display = 'none', 600);
-         }, timeAlive);
+        }, timeAlive);
     }
 
     private createOrSelectHeader() {
