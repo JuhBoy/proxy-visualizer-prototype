@@ -1,11 +1,10 @@
-
 export interface IExchangeContent {
     uuid: string;
     timings: ITiming[];
     requestHeaders: string[];
     responseHeaders: string[];
-    requestBody: number[];
-    responseBody: number[];
+    requestBody: string;
+    responseBody: string;
 }
 
 export interface ITiming {

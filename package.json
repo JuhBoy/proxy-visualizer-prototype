@@ -1,14 +1,16 @@
 {
-  "name": "traffic-analyzer",
+  "name": "Echoes-UI",
+  "productName": "Echoes",
   "version": "1.0.0",
+  "main": "./build/main.js",
   "description": "Visualize all the trafic",
   "scripts": {
-    "build": "tsc",
     "watch": "tsc -w",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "auto-formatt": "tsfmt -r",
-    "start-min": "gulp && electron ./build/main.js",
-    "start-debug": "gulp && electron ./dist/main.js"
+    "build": "gulp",
+    "start-debug": "gulp && electron ./dist/main.js",
+    "package-win": "electron-packager . Echoes-UI --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Echoes Proxy\""
   },
   "repository": "N/A",
   "keywords": [
@@ -30,6 +32,7 @@
   "dependencies": {
     "dotenv": "^7.0.0",
     "gulp-cli": "^2.1.0",
+    "pako": "^1.0.10",
     "ws": "^6.2.1"
   }
 }

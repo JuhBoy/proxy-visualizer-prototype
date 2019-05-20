@@ -1,12 +1,23 @@
 require('dotenv').config();
+if (!process.env.ENV) {
+    process.env.PORT = "8887";
+    process.env.HOST = "127.0.0.1";
+    process.env.NAME = "Proxy Visualizer";
+    process.env.ENV = "Production";
+}
+
 import { app } from "electron";
 import { Application } from "./Application";
+import { FakeServer } from "./Debug/FakeServer";
 
 const application: Application = new Application(process.env.NAME);
 
+
 app.on("ready", () => {
     application.startApplication();
-    application.openDevTools();
+    if (process.env.ENV != 'Production') {
+        application.openDevTools();
+    }
 });
 
 app.on("window-all-closed", () => {
@@ -15,7 +26,9 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
-    application.stopApplication();
+    if (!application.isStopped()) {
+        application.stopApplication();
+    }
 });
 
 app.on("activate", () => {

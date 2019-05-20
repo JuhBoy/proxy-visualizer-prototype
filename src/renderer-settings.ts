@@ -9,6 +9,7 @@ import { ipcRenderer } from "electron";
 import { IEventMessage } from "./Models/IEventMessage";
 
 export function Init() {
+    let init = false;
     let { port, pInterface, proxyRegistration, exclusionList } = reload();
 
     const wrapper = document.querySelector("#main-wrapper") as HTMLElement;
@@ -20,6 +21,8 @@ export function Init() {
     buildSaveButton(wrapper);
 
     let ipcListener = (_: any, message: IEventMessage) => {
+        if (!init) return;
+
         let updater: any = reload();
         port = updater.port, pInterface = updater.pInterface, proxyRegistration = updater.proxyRegistration, exclusionList = updater.exclusionList;
 
@@ -34,6 +37,7 @@ export function Init() {
     }
     ipcRenderer.removeListener(GlobalIpcMessage, ipcListener);
     ipcRenderer.on(GlobalIpcMessage, ipcListener);
+    init = true;
 
     function reload(): any {
         const newState = getState();

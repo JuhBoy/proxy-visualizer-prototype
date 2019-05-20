@@ -1,14 +1,12 @@
 import { IExchangeContent } from "./Models/IExchangeContent";
 import { ExchangeContentGenerator, ExchangeGenerator } from "./renderer-generator";
 import { ipcRenderer } from 'electron';
-import { IEventMessage } from "./Models/IEventMessage";
 import { IHttpExchange } from "./Models/IHttpExchange";
-import { UICommandManager } from "./Renderer/UICommandManager";
 import { writeFile } from "fs";
 import { ExchangeTimingGenerator } from "./Renderer/ExchangeTimingGenerator";
 import { menuActionConfirm, updateState, getState, getDataForMenuAction } from "./Utils/MenuHelpers";
 import { MenuAction } from "./Models/ICommand";
-import { NewHttpExchangePushChannel, BatchHttpExchangePushChannel, UpdateExchangeContentChannel, GlobalIpcMessage, ExchangeClickChannel } from "./Utils/IPCChannels";
+import { NewHttpExchangePushChannel, BatchHttpExchangePushChannel, UpdateExchangeContentChannel, ExchangeClickChannel } from "./Utils/IPCChannels";
 
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
@@ -43,6 +41,7 @@ export function Init() {
          */
         ipcRenderer.on(UpdateExchangeContentChannel, (_: any, exchangeContent: IExchangeContent) => {
             if (exchangeContent == undefined) return;
+            console.log("updated triggered");
             const generator = new ExchangeContentGenerator(exchangeContent);
             generator.flush();
 
@@ -105,7 +104,7 @@ export function Init() {
  * Add A listener click on a HTMLElement.
  * Use with care, references to the 'content' is boxed inside the event for later access
  * @param domElement Element on wich the event will trigger
- * @param content The content as array of bytes
+ * @param content The content as a Base 64 string Buffer
  */
 export function addDownloadAsFileListener(domElement: HTMLElement, content: Buffer) {
     const { dialog } = require('electron').remote;

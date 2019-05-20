@@ -1,4 +1,4 @@
-import { ipcRenderer } from "electron";
+import { ipcRenderer, app } from "electron";
 import { GlobalRequireStateChannel } from "./IPCChannels";
 
 /**
@@ -12,6 +12,10 @@ export function menuActionConfirm(type: string, data: any, state: any): boolean 
 
     switch (type.toLowerCase()) {
         case "new":
+            if (state.file && state.changed) {
+                return confirm("Active Modifications will be lost");
+            }
+            break;
         case "open":
             if (!data || !data.fileName) return false;
             if (state.file != undefined && state.changed) {
@@ -24,6 +28,9 @@ export function menuActionConfirm(type: string, data: any, state: any): boolean 
             }
             break;
         case "save-as":
+            if (!data) {
+                return false;
+            }
             if (state.file) {
                 return confirm("The file will be duplicated with the current changes");
             }
@@ -89,6 +96,13 @@ export function getDataForMenuAction(name: string): any {
         const { dialog } = require('electron').remote;
         const path: string[] = dialog.showOpenDialog({ properties: ['openFile'], filters: [{ name: 'Data files', extensions: ['ecz', 'har', 'saz'] }] });
         return (path) ? { fileName: path[0] } : null;
+    }
+
+    if (name == 'save-as') {
+        const { dialog, app } = require('electron').remote;
+        const path: string = dialog.showSaveDialog(null, { defaultPath: (app.getPath('documents') + '/Echoes-file.ecz') });
+        console.log(path);
+        return path;
     }
 
     return null;

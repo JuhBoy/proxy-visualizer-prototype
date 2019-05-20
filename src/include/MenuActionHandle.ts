@@ -18,12 +18,12 @@ type ReqCallback = (status: number, data: any, command: ICommand) => void;
 
 export class MenuActionHandle {
 
-    private static START_CONFIG = { port: process.env.PORT, path: '/start-listening' };
-    private static STOP_CONFIG = { port: process.env.PORT, path: '/stop-listening' };
-    private static NEW_CONFIG = { port: process.env.PORT, path: '/new' };
-    private static OPEN_CONFIG = { port: process.env.PORT, path: '/open' };
-    private static SAVE_CONFIG = { port: process.env.PORT, path: '/save' };
-    private static SAVE_AS_CONFIG = { port: process.env.PORT, path: '/save-as' };
+    private static START_CONFIG = { port: +process.env.PORT, path: '/Command/start-listening' };
+    private static STOP_CONFIG = { port: +process.env.PORT, path: '/Command/stop-listening' };
+    private static NEW_CONFIG = { port: +process.env.PORT, path: '/Command/new' };
+    private static OPEN_CONFIG = { port: +process.env.PORT, path: '/Command/open' };
+    private static SAVE_CONFIG = { port: +process.env.PORT, path: '/Command/save' };
+    private static SAVE_AS_CONFIG = { port: +process.env.PORT, path: '/Command/save-as' };
 
     private state: ApplicationState;
     private action: Action;
@@ -98,11 +98,15 @@ export class MenuActionHandle {
         });
     }
 
-    private SaveAsAction(): void {
-        this.makeRequest(MenuActionHandle.SAVE_AS_CONFIG, (status: number, data: any, cmd: ICommand) => {
+    private SaveAsAction(filePath: any): void {
+        const request: any = {
+            ...MenuActionHandle.SAVE_AS_CONFIG,
+            path: `${MenuActionHandle.SAVE_AS_CONFIG.path}?path=${filePath}`
+        }
+        this.makeRequest(request, (status: number, data: any, cmd: ICommand) => {
             if (status != 200) return;
-            this.state.setChanged(data.state.changed);
-            this.state.setFile(data.state.file);
+            this.state.setChanged(data.changed);
+            this.state.setFile(data.file);
         });
     }
 

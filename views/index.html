@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Hello World!</title>
+  <title>Echoes</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <style>
@@ -17,6 +17,12 @@
 
     #left-panel table tbody tr td {
       cursor: pointer;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #left-panel table {
+      table-layout: fixed;
     }
 
     .pointer {
@@ -194,7 +200,7 @@
       </div>
     </article>
 
-    <div class="row" style="height: 100%;">
+    <div class="row" style="height: -webkit-calc(100% - 50px);">
       <div id="left-panel" class="col s7 scroll scroll4" style="overflow-y: scroll; height: 100%">
         <table class="highlight">
           <thead>
@@ -216,7 +222,7 @@
           <div class="padding-10 card-content deep-purple darken-2">
             <p class="card-stats-title white-text">
                 <i class="far fa-clock"></i> 
-                <span class="bold">Timings</span> <span id="selection" class="bold"></span>
+                <span class="bold">Timings</span>
             </p>
           </div>
           <div class="card-action">
@@ -242,7 +248,7 @@
             </div>
           </div>
           <div class="card-action">
-            <ul id="request-content" class="collection scroll4" style="max-height: 200px; overflow-y: scroll;"></ul>
+            <ul id="request-content" class="collection scroll4" style="max-height: 200px; overflow-y: scroll; overflow-wrap: break-word"></ul>
           </div>
         </div>
 
@@ -264,7 +270,7 @@
             </div>
           </div>
           <div class="card-action">
-            <ul id="response-content" class="collection scroll4" style="max-height: 200px; overflow-y: scroll;"></ul>
+            <ul id="response-content" class="collection scroll4" style="max-height: 200px; overflow-y: scroll; overflow-wrap: break-word"></ul>
           </div>
         </div>
       </div>

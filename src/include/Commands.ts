@@ -52,7 +52,7 @@ export class MenuCommandHandler {
     }
 
     private ProcessLoadFileCmd(command: ICommand) {
-        HttpClient.Request<IHttpExchange[]>({ port: process.env.PORT, path: '/get-current-exchange-list' }, (s: number, d: IHttpExchange[]) => {
+        HttpClient.Request<IHttpExchange[]>({ port: +process.env.PORT, path: '/get-current-exchange-list' }, (s: number, d: IHttpExchange[]) => {
             if (!d || s != 200) return;
             this.eventManager.pushExchangeBatch(d);
         });

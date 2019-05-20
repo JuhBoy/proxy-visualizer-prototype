@@ -7,7 +7,6 @@ export class ExchangeContentGenerator {
 
     private static REQUEST_KEY = "#request-content";
     private static RESPONSE_KEY = "#response-content";
-    private static SELECTION_KEY = "#selection";
 
     private static currentExchange: IExchangeContent;
 
@@ -16,6 +15,7 @@ export class ExchangeContentGenerator {
     public constructor(content: IExchangeContent) {
         this.content = content;
         ExchangeContentGenerator.currentExchange = this.content;
+        console.log("content", content);
     }
 
     /**
@@ -25,13 +25,9 @@ export class ExchangeContentGenerator {
         const _static = ExchangeContentGenerator;
         const requestParent = document.querySelector(_static.REQUEST_KEY);
         const responseParent = document.querySelector(_static.RESPONSE_KEY);
-        const selectionTitle = document.querySelector(_static.SELECTION_KEY);
 
-        _static.clear(requestParent, responseParent, selectionTitle);
         _static.appendHeaders(_static.REQUEST_KEY, true, requestParent);
         _static.appendHeaders(_static.RESPONSE_KEY, true, responseParent);
-
-        selectionTitle.append(`${this.content.responseHeaders[0]}`);
     }
 
     /**
@@ -60,24 +56,19 @@ export class ExchangeContentGenerator {
     private static appendBodyContent(dataIdentifier: string, domElement: Element) {
         const _static = ExchangeContentGenerator;
         let body: string = "";
-        let bodyBytes: number[];
         let headers: string[];
 
         if (dataIdentifier.indexOf('response') > -1) {
             headers = _static.currentExchange.responseHeaders;
-            bodyBytes = _static.currentExchange.responseBody;
-        }
-        else {
+            body = _static.currentExchange.responseBody;
+        } else {
             headers = _static.currentExchange.requestHeaders;
-            bodyBytes = _static.currentExchange.requestBody;
+            body = _static.currentExchange.requestBody;
         }
-
-        for (const byte of bodyBytes)
-            body += String.fromCharCode(byte);
 
         const button = createNormalButton('', 'fas fa-save');
         appendCss(button, { marginBottom: '5px' });
-        addDownloadAsFileListener(button, Buffer.from(bodyBytes));
+        addDownloadAsFileListener(button, Buffer.from(body));
 
         domElement.appendChild(button);
         domElement.appendChild(document.createElement('br'));
@@ -176,8 +167,7 @@ export class ExchangeContentGenerator {
 
         const request: Element = document.querySelector(ExchangeContentGenerator.REQUEST_KEY);
         const response: Element = document.querySelector(ExchangeContentGenerator.RESPONSE_KEY);
-        const selection: Element = document.querySelector(ExchangeContentGenerator.SELECTION_KEY);
 
-        ExchangeContentGenerator.clear(request, response, selection);
+        ExchangeContentGenerator.clear(request, response);
     }
 }

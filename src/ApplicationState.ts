@@ -9,7 +9,7 @@ export class ApplicationState {
     private listening: boolean;
     private file: string | null;
     private changed: boolean;
-    private settings: any = { exclusionList: [], port: null, interface: "-1", registered: true };
+    private settings: any = { exclusionList: [], port: null, interface: "0", registered: true };
 
     constructor() {
         ipcMain.on(GlobalRequireStateChannel, (_: any, data: any) => {

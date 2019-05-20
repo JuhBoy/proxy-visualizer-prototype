@@ -7,7 +7,7 @@ import { MenuActionHandle, Action } from './MenuActionHandle';
 import { ApplicationState } from '../ApplicationState';
 import { IEventMessage } from '../Models/IEventMessage';
 import { MenuCommandHandler } from './Commands';
-import { MenuAction } from '../Models/ICommand';
+import { MenuAction, CommandType } from '../Models/ICommand';
 import {
     ExchangeClickChannel,
     MenuActionChannel,
@@ -68,12 +68,22 @@ export class MainEventManager extends EventManager {
 
     private setClickExchangeListener() {
         let clickExchangeListener = (event: any, args: any) => {
-            const { uuid } = args;
-            const query = { hostname: process.env.HOST, port: process.env.PORT, path: `/get-exchange-content?uuid=${uuid}` };
+            const uuid  = HttpClient.toPercentEncodingText(args.uuid);
+            const query = { hostname: process.env.HOST, port: +process.env.PORT, path: `/exchanges/content/${uuid}` };
 
             HttpClient.Request<IExchangeContent>(query, (status: number, content: IExchangeContent) => {
-                if (status != 200 || content == undefined) { return; }
+                if (!content) { return; }
                 this.window.webContents.send(UpdateExchangeContentChannel, content);
+            }, (status: number, content: any) => {
+                const msg: IEventMessage = {
+                    state: ApplicationState.instance(),
+                    command: {
+                        type: CommandType.Message,
+                        header: `${status} Internal Error`,
+                        content: JSON.stringify(content)
+                    }
+                }
+                this.window.webContents.send(GlobalIpcMessage, msg);
             });
         };
         ipcMain.on(ExchangeClickChannel, clickExchangeListener);

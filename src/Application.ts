@@ -3,7 +3,6 @@ import { join } from "path";
 import { MainEventManager, EventManager } from "./include/EventManager";
 import { Hash, HashStr } from "./Utils/Collections";
 import { WebSocketClient } from "./Web/WebSocketClient";
-import { FakeServer } from "./Debug/FakeServer";
 import { ApplicationState } from "./ApplicationState";
 import { SettingsEvent } from "./include/SettingsEvent";
 import { GlobalIpcMessage } from "./Utils/IPCChannels";
@@ -11,6 +10,7 @@ import { IEventMessage } from "./Models/IEventMessage";
 import { CommandType, Targets } from "./Models/ICommand";
 
 export class Application {
+    private stopped: boolean;
     private myName: string;
     private mainWindow: BrowserWindow;
     private settingsWindow: BrowserWindow;
@@ -22,10 +22,15 @@ export class Application {
     private static eventHandlers: Hash<EventManager>;
 
     constructor(name: string) {
+        this.stopped = false;
         this.myName = name;
         Application.tagToIdWindow = {};
         Application.eventHandlers = {};
         ApplicationState.instance().setAlive(false);
+    }
+
+    public isStopped() {
+        return this.stopped;
     }
 
     public static getEventManagerByTag(tag: string): EventManager {
@@ -34,10 +39,6 @@ export class Application {
     }
 
     public createMainWindow(): BrowserWindow {
-        if (process.env.ENV == "Development") {
-            new FakeServer(true, (type: string, ws: any) => { /* SILENCE! */ });
-        }
-
         return new BrowserWindow({
             title: this.myName,
             height: 920,
@@ -54,7 +55,7 @@ export class Application {
         this.mainWindow = this.createMainWindow();
         this.mainWindow.loadFile(join(__dirname, "../views/index.html"));
         this.currentWindow = this.mainWindow;
-        this.mainWindow.on("closed", () => { this.mainWindow = null; });
+        this.mainWindow.on("closed", () => { this.settingsWindow.close(); });
         this.mainWindow.on("ready-to-show", () => { this.mainWindow.show(); });
         Application.eventHandlers[this.mainWindow.id] = new MainEventManager(this.mainWindow).startListening();
         Application.tagToIdWindow[Targets.mainWindow] = this.mainWindow.id;
@@ -80,13 +81,17 @@ export class Application {
         this.setUpMainWindow();
         this.setUpSettingsWindow();
         this.setOrUpdateRendererState();
+        this.registerWebSocket();
 
-        this.networkClient = new WebSocketClient('ws://localhost:8085', (json: any) => {
+        ApplicationState.instance().setAlive(true);
+        this.stopped = false;
+    }
+
+    private registerWebSocket() {
+        this.networkClient = new WebSocketClient(`ws://${process.env.HOST}:${process.env.PORT}`, (json: any) => {
             const manager = <MainEventManager> Application.eventHandlers[this.mainWindow.id];
             manager.pushExchangeData(json);
         }, null);
-
-        ApplicationState.instance().setAlive(true);
     }
 
     private setOrUpdateRendererState() {
@@ -97,10 +102,10 @@ export class Application {
     }
 
     public stopApplication(): void {
+        this.networkClient.stop();
         this.currentWindow = null;
         this.mainWindow = null;
         this.settingsWindow = null;
-        this.networkClient.stop();
 
         for (const key in Application.eventHandlers) {
             if (Application.eventHandlers.hasOwnProperty(key)) {
@@ -112,6 +117,7 @@ export class Application {
         Application.tagToIdWindow = {};
 
         ApplicationState.instance().setAlive(false);
+        this.stopped = true;
     }
 
     public getCurrentWindow(): BrowserWindow {

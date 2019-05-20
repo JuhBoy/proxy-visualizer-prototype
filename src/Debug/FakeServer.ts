@@ -122,7 +122,7 @@ export class FakeServer {
             } else {
                 const index = url.indexOf('?uuid=');
                 responseObj.uuid = url.substring(index + 6, url.length);
-                responseObj.responseHeaders[0] = `HTTP/1.1 ${this.generatedSample[responseObj.uuid].status} OK`;
+                //responseObj.responseHeaders[0] = `HTTP/1.1 ${this.generatedSample[responseObj.uuid].status} OK`;
                 res.write(JSON.stringify(responseObj));
             }
 
@@ -166,6 +166,7 @@ export class FakeServer {
                     };
                     this.generatedSample[newSample.uuid] = newSample;
 
+                    console.log(JSON.stringify(newSample));
                     ws.send(JSON.stringify(newSample));
                 } else if (ws.readyState == 2 || ws.readyState == 3) {
                     this.sockets.splice(index, 1);
