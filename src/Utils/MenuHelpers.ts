@@ -35,9 +35,14 @@ export function menuActionConfirm(type: string, data: any, state: any): boolean 
                 return confirm("The file will be duplicated with the current changes");
             }
             break;
+        case "setting":
+            if (state.listening || (state.file && state.changed)) {
+                alert("Please stop listening before accessing to settings");
+                return false;
+            }
+            break;
         case "start":
         case "stop":
-        case "setting":
         default:
             return true;
     }

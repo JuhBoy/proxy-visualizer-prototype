@@ -8,10 +8,8 @@ if (!process.env.ENV) {
 
 import { app } from "electron";
 import { Application } from "./Application";
-import { FakeServer } from "./Debug/FakeServer";
 
 const application: Application = new Application(process.env.NAME);
-
 
 app.on("ready", () => {
     application.startApplication();

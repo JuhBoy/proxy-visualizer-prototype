@@ -4,126 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <style>
-        #left-panel table tbody tr td {
-            cursor: pointer;
-        }
-
-        .pointer {
-            cursor: pointer;
-        }
-
-        .gradient-45deg-deep-purple-blue {
-            background: #6200ea;
-            background: -webkit-linear-gradient(45deg, #6200ea, #1976d2) !important;
-            background: -moz- oldlinear-gradient(45deg, #6200ea, #1976d2) !important;
-            background: -o-linear-gradient(45deg, #6200ea, #1976d2) !important;
-            background: linear-gradient(45deg, #6200ea, #1976d2) !important;
-        }
-
-        .no-margin {
-            margin: 0;
-        }
-
-        .marg-left-2 {
-            margin-left: 1%;
-        }
-
-        .padding-10 {
-            padding: 6px !important
-        }
-
-        .bold {
-            font-weight: bold;
-        }
-
-        td,
-        th {
-            padding: 6px 0px;
-        }
-
-        html {
-            font-size: 13px;
-        }
-
-        .scroll {
-            width: 20px;
-            height: 200px;
-            overflow: auto;
-            float: left;
-            margin: 0 0px;
-        }
-
-        .scroll4::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        .scroll4::-webkit-scrollbar-thumb {
-            background: #666;
-            border-radius: 20px;
-        }
-
-        .scroll4::-webkit-scrollbar-track {
-            background: #ddd;
-            border-radius: 20px;
-        }
-
-        .wrapper-border {
-            border-left: 1px solid #1976d2;
-            border-right: 1px solid #1976d2;
-            border-bottom: 1px solid #1976d2;
-        }
-
-        .btn-floating.btn-small {
-            cursor: default;
-            z-index: 9999;
-            width: 10px;
-            height: 10px;
-        }
-
-        .absolute-3 {
-            position: absolute;
-            right: 40px;
-            top: 8px;
-        }
-
-        .absolute-2 {
-            position: absolute;
-            right: 25px;
-            top: 8px;
-        }
-
-        .absolute-1 {
-            position: absolute;
-            right: 10px;
-            top: 8px;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        a,
-        p,
-        span,
-        div,
-        table,
-        tr,
-        td,
-        thead {
-            -webkit-app-region: no-drag;
-            -webkit-user-select: none;
-        }
-
-        .chip {
-            border-radius: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="../src/Style/Materialize.min.css">
+    <link rel="stylesheet" href="../src/Style/FontAwesome.all.min.css">
+    <link rel="stylesheet" href="../src/Style/Settings.css">
 </head>
 
 <body style="height: 100%; -webkit-app-region: drag;">
@@ -149,7 +32,7 @@
     </div>
 
     <div id="message-container" style="display: none"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="../src/3party/Materialize.min.js"></script>
 </body>
 
 <script>
@@ -158,9 +41,9 @@
     const rendererInit = require('../dist/renderer-settings.js').Init;
 
     window.onload = () => {
+        M.AutoInit();
         globalInit({ hideNotClose: true });
         rendererInit();
-        M.AutoInit();
     }
 </script>
 

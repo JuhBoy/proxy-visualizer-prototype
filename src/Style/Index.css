@@ -1,0 +1,147 @@
+.be-badge {
+  font-weight: 300;
+  font-size: 0.8rem;
+  color: #fff;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+#left-panel table tbody tr td {
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#left-panel table {
+  table-layout: fixed;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.gradient-45deg-indigo-purple {
+  background: #303f9f;
+  background: -webkit-linear-gradient(45deg, #303f9f, #7b1fa2) !important;
+  background: -moz- oldlinear-gradient(45deg, #303f9f, #7b1fa2) !important;
+  background: -o-linear-gradient(45deg, #303f9f, #7b1fa2) !important;
+  background: linear-gradient(45deg, #303f9f, #7b1fa2) !important;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.marg-left-2 {
+  margin-left: 1%;
+}
+
+.padding-10 {
+  padding: 6px !important
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.collection .collection-item {
+  padding: 2px 20px;
+}
+
+td,
+th {
+  padding: 6px 0px;
+}
+
+html {
+  font-size: 13px;
+}
+
+.scroll {
+  width: 20px;
+  height: 200px;
+  overflow: auto;
+  float: left;
+  margin: 0 0px;
+}
+
+.scroll4::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scroll4::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 20px;
+}
+
+.scroll4::-webkit-scrollbar-track {
+  background: #ddd;
+  border-radius: 20px;
+}
+
+.wrapper-border {
+  border-left: 1px solid #8e24aa;
+  border-right: 1px solid #8e24aa;
+  border-bottom: 1px solid #8e24aa;
+}
+
+.btn-floating.btn-small {
+  cursor: default;
+  z-index: 9999;
+  width: 10px;
+  height: 10px;
+}
+
+.absolute-3 {
+  position: absolute;
+  right: 65px;
+  top: 8px;
+}
+
+.absolute-2 {
+  position: absolute;
+  right: 45px;
+  top: 8px;
+}
+
+.absolute-1 {
+  position: absolute;
+  right: 25px;
+  top: 8px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+p,
+span,
+div,
+table,
+tr,
+td,
+thead {
+  -webkit-app-region: no-drag;
+  -webkit-user-select: none;
+}
+
+#menu-button-container div:hover {
+  border: 1px solid #aaaf;
+  transition: 0.2s;
+}
+
+#menu-button-container div {
+  transition: 0.08s;
+  width: 60px;
+}
+
+#menu-button-container div i {
+  width: 100%;
+}
+
+#message-container h4 {
+  margin: 2px;
+}

@@ -38,7 +38,8 @@ export class UICommandManager {
     }
 
     playAlert() {
-        throw new Error("Method not implemented.");
+        const domAlert = new MessageGenerator(this.command);
+        domAlert.show(4000);
     }
 
     playAction() {

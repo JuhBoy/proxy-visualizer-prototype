@@ -46,10 +46,13 @@ export class HttpClient {
             console.log("[HTTP]", error);
         });
 
-        if (options.body)
-            request.end(Buffer.from(JSON.stringify(options.body)));
-        else
+        if (options.body) {
+            request.setHeader('Content-type', 'application/json; charset=UTF-8');
+            request.end(JSON.stringify(options.body));
+        }
+        else {
             request.end();
+        }
     }
 
     public static toPercentEncodingText(text: string): string {

@@ -27,7 +27,7 @@ export class SettingsEvent extends EventManager {
     }
 
     private TryUpdateSettings(data: any) {
-        HttpClient.Request<any>({ path: '/update-state', body: data }, (status: number, data: any) => {
+        HttpClient.Request<any>({ path: '/Command/update-state', body: data, method: 'POST' }, (status: number, data: any) => {
             let cmdType: CommandType;
 
             if (status != 200) {
