@@ -1,7 +1,7 @@
 import { net, ClientRequest } from 'electron';
 import { HashStr } from '../Utils/Collections';
 
-type RspCallback = (s: number, d:any) => void;
+type RspCallback = (s: number, d: any) => void;
 
 export class HttpClient {
 

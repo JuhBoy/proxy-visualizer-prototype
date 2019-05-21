@@ -68,7 +68,7 @@ export class MainEventManager extends EventManager {
 
     private setClickExchangeListener() {
         let clickExchangeListener = (event: any, args: any) => {
-            const uuid  = HttpClient.toPercentEncodingText(args.uuid);
+            const uuid = HttpClient.toPercentEncodingText(args.uuid);
             const query = { hostname: process.env.HOST, port: +process.env.PORT, path: `/exchanges/content/${uuid}` };
 
             HttpClient.Request<IExchangeContent>(query, (status: number, content: IExchangeContent) => {

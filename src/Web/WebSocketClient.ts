@@ -36,7 +36,7 @@ export class WebSocketClient {
                 console.log(exception);
                 return;
             }
-            
+
             this.onMessage(jsonObject);
         });
 
