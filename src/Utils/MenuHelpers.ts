@@ -106,7 +106,6 @@ export function getDataForMenuAction(name: string): any {
     if (name == 'save-as') {
         const { dialog, app } = require('electron').remote;
         const path: string = dialog.showSaveDialog(null, { defaultPath: (app.getPath('documents') + '/Echoes-file.ecz') });
-        console.log(path);
         return path;
     }
 

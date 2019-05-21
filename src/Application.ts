@@ -8,6 +8,7 @@ import { SettingsEvent } from "./include/SettingsEvent";
 import { GlobalIpcMessage } from "./Utils/IPCChannels";
 import { IEventMessage } from "./Models/IEventMessage";
 import { CommandType, Targets } from "./Models/ICommand";
+import { HttpClient } from "./Web/HttpClient";
 
 export class Application {
     private stopped: boolean;
@@ -83,7 +84,6 @@ export class Application {
         this.setOrUpdateRendererState();
         this.registerWebSocket();
 
-        ApplicationState.instance().setAlive(true);
         this.stopped = false;
     }
 
@@ -95,8 +95,15 @@ export class Application {
     }
 
     private setOrUpdateRendererState() {
-        this.mainWindow.on('ready-to-show', () => {
-            const message: IEventMessage = { state: ApplicationState.instance(), command: { type: CommandType.Void } };
+        HttpClient.Request({ path: 'settings/state' }, (status: number, response: any) => {
+            const state: ApplicationState = ApplicationState.instance();
+            state.setSettings(response.data.settings);
+            state.setListening(response.data.listening);
+            state.setChanged(response.data.changed);
+            state.setFile(response.data.file);
+            state.setAlive(true);
+
+            const message: IEventMessage = { state: state, command: { type: CommandType.Void } };
             this.mainWindow.webContents.send(GlobalIpcMessage, message);
         });
     }

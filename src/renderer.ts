@@ -41,7 +41,6 @@ export function Init() {
          */
         ipcRenderer.on(UpdateExchangeContentChannel, (_: any, exchangeContent: IExchangeContent) => {
             if (exchangeContent == undefined) return;
-            console.log("updated triggered");
             const generator = new ExchangeContentGenerator(exchangeContent);
             generator.flush();
 

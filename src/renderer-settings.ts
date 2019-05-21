@@ -63,6 +63,8 @@ export function Init() {
         portRow.addContent(portInput);
         portRow.flush();
 
+        (document.querySelector("input[name=port-number]") as any).focus(); // Materialize Hack
+
         return portInput;
     }
 

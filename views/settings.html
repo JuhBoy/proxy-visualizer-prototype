@@ -41,9 +41,9 @@
     const rendererInit = require('../dist/renderer-settings.js').Init;
 
     window.onload = () => {
-        M.AutoInit();
         globalInit({ hideNotClose: true });
         rendererInit();
+        M.AutoInit();
     }
 </script>
 

@@ -15,7 +15,6 @@ export class ExchangeContentGenerator {
     public constructor(content: IExchangeContent) {
         this.content = content;
         ExchangeContentGenerator.currentExchange = this.content;
-        console.log("content", content);
     }
 
     /**
