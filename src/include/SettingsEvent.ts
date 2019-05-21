@@ -27,22 +27,22 @@ export class SettingsEvent extends EventManager {
     }
 
     private TryUpdateSettings(data: any) {
-        HttpClient.Request<any>({ path: '/Command/update-state', body: data, method: 'POST' }, (status: number, data: any) => {
+        HttpClient.Request<any>({ path: '/Command/update-state', body: data, method: 'POST' }, (status: number, response: any) => {
             let cmdType: CommandType;
 
             if (status != 200) {
                 cmdType = CommandType.Alert;
             } else {
                 cmdType = CommandType.Message;
-                ApplicationState.instance().setProperties(data.state);
+                ApplicationState.instance().setProperties(response.data);
             }
 
             let message: IEventMessage = {
                 state: ApplicationState.instance(),
                 command: {
                     type: cmdType,
-                    header: data.header,
-                    content: data.content
+                    header: response.header,
+                    content: response.content
                 }
             };
 

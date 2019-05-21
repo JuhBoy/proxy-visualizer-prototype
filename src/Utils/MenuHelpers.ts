@@ -86,9 +86,9 @@ export function getState() {
  * returning a event-message to the renderer wich update the state btw.
  * @param key The specified key for window event manager (use IPCKeys.ts file)
  */
-export function syncState(key: string) {
+export function syncState(key: string, state: any) {
     const { ipcRenderer } = require("electron");
-    ipcRenderer.send(key, getState());
+    ipcRenderer.send(key, state);
 }
 
 /**

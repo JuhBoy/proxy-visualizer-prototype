@@ -35,8 +35,13 @@ export function Init() {
             buildChip(el, false);
         });
     }
+    let onFocus = (ev: any) => { ipcListener(null, null); };
+
     ipcRenderer.removeListener(GlobalIpcMessage, ipcListener);
+    window.removeEventListener('focus', onFocus);
     ipcRenderer.on(GlobalIpcMessage, ipcListener);
+    window.addEventListener('focus', onFocus);
+
     init = true;
 
     function reload(): any {
@@ -110,15 +115,14 @@ export function Init() {
 
         button.addEventListener('click', (ev) => {
             const { remote } = require("electron");
-            updateState({
+            syncState(SettingStateSyncChannel, {
                 settings: {
                     port: port,
-                    inteface: pInterface,
-                    registration: proxyRegistration,
+                    interface: pInterface,
+                    registered: proxyRegistration,
                     exclusionList: exclusionList
                 }
             });
-            syncState(SettingStateSyncChannel);
             //remote.getCurrentWindow().hide();
         });
     }
