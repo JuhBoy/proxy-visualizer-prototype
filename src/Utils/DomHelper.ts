@@ -32,7 +32,7 @@ export function createAwesomIcon(type: string, text: string): HTMLElement {
 /**
  * Create DOM elements from body of type application/x-www-form-urlencoded
  * @param content Decoded content as string from HTTP body
- * @param htmlType the HTML tag to use as parents of each keys
+ * @param htmlType the HTML tag to use as a parent of each keys
  */
 //TODO: Change this to class if more parser are required in the futur
 export function xWwwFormUrlEncodedDomSerializer(content: string, htmlType: string): HTMLElement[] {

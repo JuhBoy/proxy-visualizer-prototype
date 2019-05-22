@@ -24,7 +24,8 @@ export class ExchangeContentGenerator {
         const _static = ExchangeContentGenerator;
         const requestParent = document.querySelector(_static.REQUEST_KEY);
         const responseParent = document.querySelector(_static.RESPONSE_KEY);
-
+        
+        _static.clear(requestParent, responseParent);
         _static.appendHeaders(_static.REQUEST_KEY, true, requestParent);
         _static.appendHeaders(_static.RESPONSE_KEY, true, responseParent);
     }
@@ -59,10 +60,10 @@ export class ExchangeContentGenerator {
 
         if (dataIdentifier.indexOf('response') > -1) {
             headers = _static.currentExchange.responseHeaders;
-            body = _static.currentExchange.responseBody;
+            body = _static.decodeB64String(_static.currentExchange.responseBody);
         } else {
             headers = _static.currentExchange.requestHeaders;
-            body = _static.currentExchange.requestBody;
+            body = _static.decodeB64String(_static.currentExchange.requestBody);
         }
 
         const button = createNormalButton('', 'fas fa-save');
@@ -153,6 +154,10 @@ export class ExchangeContentGenerator {
     private static getDomIdFromdataIdentifier(dataIdentifier: string) {
         return (dataIdentifier.indexOf('request') > -1) ? ExchangeContentGenerator.REQUEST_KEY :
             ExchangeContentGenerator.RESPONSE_KEY
+    }
+
+    private static decodeB64String(b64string: string): string {
+        return atob(b64string);
     }
 
     private static clear(...elements: Element[]) {
