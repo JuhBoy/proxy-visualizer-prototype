@@ -84,16 +84,16 @@ export class ExchangeContentGenerator {
     }
 
     private static appendHeaders(dataIdentifier: string, formatted: boolean, domElement: Element) {
-        const _static = ExchangeContentGenerator;
-        let headers: string[] = [];
+        const _static = ExchangeContentGenerator;        
+        const isResponse: boolean = (dataIdentifier.indexOf('response') != -1);
 
-        headers = (dataIdentifier.indexOf('response') != -1) ? _static.currentExchange.responseHeaders :
-            _static.currentExchange.requestHeaders;
-
-        if (formatted)
+        if (formatted) {
+            const headers: string[] =  (isResponse) ? _static.currentExchange.responseHeaders : _static.currentExchange.requestHeaders;
             _static.appendFormattedRows(_static.buildFormattedHeaders(headers), domElement);
-        else
+        } else {
+            const headers: string = (isResponse) ? _static.currentExchange.responseRawHeaders : _static.currentExchange.requestRawHeaders;
             _static.appendRawRows(headers, domElement);
+        }
     }
 
     private static buildFormattedHeaders(headers: string[]): HTMLLIElement[] {
@@ -143,10 +143,10 @@ export class ExchangeContentGenerator {
             domElement.appendChild(row);
     }
 
-    private static appendRawRows(headers: string[], domElement: Element) {
-        for (const header of headers) {
-            domElement.append(header);
-            domElement.appendChild(document.createElement('br'));
+    private static appendRawRows(headers: string, domElement: Element) {
+        const lines: string[] = headers.match(/[^\r\n]+/g);
+        for (const line of lines) {
+            domElement.append(line, document.createElement("br"));
         }
     }
 
