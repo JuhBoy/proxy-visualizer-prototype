@@ -73,7 +73,7 @@ export class MenuActionHandle {
 
         const request = {
             ...MenuActionHandle.OPEN_CONFIG,
-            path: `${MenuActionHandle.OPEN_CONFIG.path}/${data.fileName}`
+            path: `${MenuActionHandle.OPEN_CONFIG.path}?filePath=${data.fileName}`
         }
 
         this.makeRequest(request, (_: number, data: any, cmd: ICommand) => {
@@ -91,10 +91,10 @@ export class MenuActionHandle {
     }
 
     private SaveAction(): void {
-        this.makeRequest(MenuActionHandle.SAVE_CONFIG, (status: number, data: any, cmd: ICommand) => {
+        this.makeRequest(MenuActionHandle.SAVE_CONFIG, (status: number, response: any, cmd: ICommand) => {
             if (status != 200) return;
-            this.state.setChanged(data.state.changed);
-            this.state.setFile(data.state.file);
+            this.state.setChanged(response.data.changed);
+            this.state.setFile(response.data.file);
         });
     }
 
